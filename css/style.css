@@ -350,17 +350,31 @@ body{background:#050403;font-family:'DM Sans',sans-serif;color:var(--text);displ
 .tabrow{display:flex; gap:5px; margin-bottom:12px;}
 .tabrow .tab{flex:1; padding:8px 4px; text-align:center; font-family:'Cinzel',serif; font-size:11px; letter-spacing:1px; color:var(--muted); cursor:pointer; background:rgba(0,0,0,.15); border:1.5px solid var(--section-border); border-radius:9px; text-transform:uppercase; transition:.15s;}
 .tabrow .tab.active{color:var(--goldlit); border-color:var(--gold); background:rgba(200,160,48,.08); border-bottom:2px solid var(--goldlit);}
-.grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; padding:6px; overflow:hidden;}
-.slot{background:radial-gradient(120% 120% at 32% 24%, #241c12 0%, #120d07 68%, #0a0703 100%); border:2px solid var(--rar,#2a2218); border-radius:8px; aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; cursor:pointer; overflow:hidden; padding:2px; transition:.12s; box-shadow:inset 0 -10px 14px -10px color-mix(in srgb,var(--rar,#2a2218) 50%,transparent), inset 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4); min-width:0;}
-.slot::before{content:''; position:absolute; inset:0; pointer-events:none; z-index:1; border-radius:8px; box-shadow:inset 0 0 8px color-mix(in srgb,var(--rar,#2a2218) 18%,transparent);}
+.grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; padding:6px 6px 6px 10px;}
+.slot{background:radial-gradient(120% 120% at 32% 24%, #241c12 0%, #120d07 68%, #0a0703 100%); border:1px solid var(--rar,#2a2218); border-radius:8px; aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; cursor:pointer; overflow:visible; padding:2px; transition:.12s; box-shadow:0 0 calc(var(--gint,.05)*42px) calc(var(--gint,.05)*-6px) color-mix(in srgb,var(--rar,#2a2218) 66%,transparent), inset 0 -10px 14px -10px color-mix(in srgb,var(--rar,#2a2218) 50%,transparent), inset 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4); min-width:0; outline:1px solid color-mix(in srgb,var(--rar,#2a2218) 40%,transparent); outline-offset:3px; --gint:.05;}
+.slot::before{content:''; position:absolute; inset:0; pointer-events:none; z-index:1; border-radius:8px; box-shadow:inset 0 0 10px color-mix(in srgb,var(--rar,#2a2218) 24%,transparent);}
 .slot:active{transform:scale(.95);}
-.slot.w{border-color:#8a7866;} .slot.g{border-color:#5fb45e;} .slot.b{border-color:#5b96d8;} .slot.o{border-color:#e2913c;} .slot.r{border-color:#d95a49;}
-.slot svg{width:70%;height:70%;max-width:32px;max-height:32px;} .slot .ic{font-size:min(22px,70%);line-height:1;}
+.slot.w{--rar:#d7d0c0;--gint:.05;} .slot.g{--rar:#5fb45e;--gint:.24;} .slot.b{--rar:#5b96d8;--gint:.34;} .slot.o{--rar:#e2913c;--gint:.45;} .slot.r{--rar:#d95a49;--gint:.58;}
+.slot svg{width:70%;height:70%;max-width:32px;max-height:32px; position:relative; z-index:2; filter:drop-shadow(0 2px 3px rgba(0,0,0,.45));} .slot .ic{font-size:min(22px,70%);line-height:1;}
+/* Flame effect for enhanced items */
+.slot .flame{position:absolute; left:50%; bottom:0; transform:translateX(-50%); width:80%; height:var(--fh,0); z-index:0; pointer-events:none; opacity:var(--fop,0); background:radial-gradient(52% 64% at 50% 82%,color-mix(in srgb,var(--fmid) 72%,transparent),transparent 72%); filter:blur(2px); animation:slot-aura var(--fspd,2s) ease-in-out infinite; border-radius:50% 50% 0 0;}
+.slot .flame::before{content:""; position:absolute; bottom:2px; left:50%; width:60%; height:calc(var(--fh,0)*.9); background:linear-gradient(to top,var(--fedge),var(--fmid) 42%,var(--fcore) 76%,transparent); border-radius:50% 50% 42% 42% / 64% 64% 38% 38%; filter:blur(1.5px); transform-origin:50% 100%; transform:translateX(-50%); mix-blend-mode:screen; animation:slot-flame1 var(--fspd,2s) ease-in-out infinite;}
+@keyframes slot-aura{0%,100%{opacity:calc(var(--fop,.5)*.78);}50%{opacity:var(--fop,.5);}}
+@keyframes slot-flame1{0%,100%{transform:translateX(-50%) scaleY(1);}25%{transform:translateX(-53%) scaleY(1.12);}50%{transform:translateX(-47%) scaleY(.92);}75%{transform:translateX(-51%) scaleY(1.06);}}
+.slot.enh30{--fcore:#ffd27a;--fmid:#e89233;--fedge:#bf5618;--fh:70%;--fop:.45;--fspd:2.6s;}
+.slot.enh60{--fcore:#ffe390;--fmid:#ff8a2a;--fedge:#d23612;--fh:85%;--fop:.6;--fspd:1.9s;}
+.slot.enh90{--fcore:#fff2c4;--fmid:#ff7a1e;--fedge:#e2241a;--fh:100%;--fop:.8;--fspd:1.35s;}
+.slot.enh30 .slot-enh{color:#ffce86; text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 6px rgba(226,146,52,.5);}
+.slot.enh60 .slot-enh{color:#ffba6a; text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 8px rgba(255,138,42,.6);}
+.slot.enh90 .slot-enh{color:#ffd27a; text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 10px rgba(255,120,30,.8);}
+.slot.enh60 svg{filter:drop-shadow(0 0 4px rgba(255,150,55,.4)) drop-shadow(0 2px 3px rgba(0,0,0,.5));}
+.slot.enh90 svg{filter:drop-shadow(0 0 7px rgba(255,170,60,.7)) drop-shadow(0 0 3px rgba(255,90,30,.5));}
+.slot.enh90{box-shadow:0 0 calc(var(--gint,.05)*42px) calc(var(--gint,.05)*-6px) color-mix(in srgb,var(--rar,#2a2218) 66%,transparent), 0 0 16px -4px rgba(255,110,30,.45), inset 0 -10px 14px -10px color-mix(in srgb,var(--rar,#2a2218) 50%,transparent), inset 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);}
 .slot .cnt{position:absolute; bottom:1px; right:3px; font-size:9px; font-weight:700; color:#fff; text-shadow:0 1px 2px #000;}
 .slot .tg{position:absolute; top:1px; left:2px; font-size:7px; font-weight:700; color:var(--goldlit); background:rgba(0,0,0,.45); padding:0 3px; border-radius:3px; opacity:.7; z-index:3;}
 .slot .enh{position:absolute; top:1px; right:2px; font-size:7px; font-weight:700; color:var(--goldlit); opacity:.7; z-index:3;}
 .slot .nm{font-size:7px; text-align:center; line-height:1; margin-top:1px; color:var(--textdim); max-height:14px; overflow:hidden;}
-.slot.empty{border-style:dashed; opacity:.5; outline:none; box-shadow:none; background:var(--slot-bg);}
+.slot.empty{border-style:dashed; opacity:.5; outline:none !important; box-shadow:none; background:var(--slot-bg);}
 .slot.empty::before{display:none;}
 .equipgrid{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; padding:4px;}
 .eqslot{background:var(--slot-bg); border:1.5px dashed #2a2218; border-radius:10px; aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; cursor:pointer; padding:3px;}
@@ -559,22 +573,12 @@ input.nm:focus{outline:none; border-color:var(--gold);}
 .pips{display:flex; gap:2px; margin-top:5px;}
 .pip{height:5px; flex:1; border-radius:2px; background:#1c1810; transition:.3s;}
 
-/* ============ ARKANA RARITY — 5 renk ============ */
-.rar-white{--rar:#d7d0c0;--gint:.02;}
-.rar-white.slot{box-shadow:inset 0 -8px 10px -8px color-mix(in srgb,var(--rar) 22%,transparent), inset 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);}
-.rar-white.slot::before{box-shadow:inset 0 0 4px color-mix(in srgb,var(--rar) 8%,transparent);}
-.rar-green{--rar:#5fb45e;--gint:.06;}
-.rar-green.slot{box-shadow:inset 0 -8px 12px -9px color-mix(in srgb,var(--rar) 30%,transparent), inset 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);}
-.rar-green.slot::before{box-shadow:inset 0 0 5px color-mix(in srgb,var(--rar) 10%,transparent);}
-.rar-blue{--rar:#5b96d8;--gint:.14;}
-.rar-blue.slot{box-shadow:inset 0 -10px 14px -10px color-mix(in srgb,var(--rar) 38%,transparent), inset 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);}
-.rar-blue.slot::before{box-shadow:inset 0 0 6px color-mix(in srgb,var(--rar) 14%,transparent);}
-.rar-gold{--rar:#e2913c;--gint:.22;}
-.rar-gold.slot{box-shadow:inset 0 -10px 16px -10px color-mix(in srgb,var(--rar) 50%,transparent), inset 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);}
-.rar-gold.slot::before{box-shadow:inset 0 0 8px color-mix(in srgb,var(--rar) 20%,transparent);}
-.rar-red{--rar:#d95a49;--gint:.30;}
-.rar-red.slot{box-shadow:inset 0 -12px 18px -10px color-mix(in srgb,var(--rar) 55%,transparent), inset 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.4);}
-.rar-red.slot::before{box-shadow:inset 0 0 10px color-mix(in srgb,var(--rar) 25%,transparent);}
+/* ============ ARKANA RARITY — 5 renk (gint = glow intensity from design doc) ============ */
+.rar-white{--rar:#d7d0c0;--gint:.05;}
+.rar-green{--rar:#5fb45e;--gint:.24;}
+.rar-blue{--rar:#5b96d8;--gint:.34;}
+.rar-gold{--rar:#e2913c;--gint:.45;}
+.rar-red{--rar:#d95a49;--gint:.58;}
 @keyframes pulseGold{0%,100%{box-shadow:0 0 6px -2px color-mix(in srgb,#e2913c 40%,transparent),inset 0 -10px 16px -10px color-mix(in srgb,#e2913c 50%,transparent),inset 0 0 0 1px rgba(0,0,0,.5),0 3px 8px rgba(0,0,0,.4);}50%{box-shadow:0 0 12px -1px color-mix(in srgb,#e2913c 55%,transparent),inset 0 -12px 18px -10px color-mix(in srgb,#e2913c 60%,transparent),inset 0 0 0 1px rgba(0,0,0,.5),0 3px 8px rgba(0,0,0,.4);}}
 @keyframes pulseRed{0%,100%{box-shadow:0 0 8px -2px color-mix(in srgb,#d95a49 50%,transparent),inset 0 -12px 18px -10px color-mix(in srgb,#d95a49 55%,transparent),inset 0 0 0 1px rgba(0,0,0,.5),0 3px 8px rgba(0,0,0,.4);}50%{box-shadow:0 0 14px -1px color-mix(in srgb,#d95a49 65%,transparent),inset 0 -14px 20px -10px color-mix(in srgb,#d95a49 65%,transparent),inset 0 0 0 1px rgba(0,0,0,.5),0 3px 8px rgba(0,0,0,.4);}}
 

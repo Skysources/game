@@ -733,8 +733,10 @@ SKY.UI = (function () {
       var o = list[i];
       var tier = o.tier > 0 ? '<span class="slot-tier t' + o.tier + '">' + TIER_ROMAN[o.tier] + '</span>' : '';
       var count = o.count > 1 ? '<span class="slot-count">' + (o.count > 99 ? '99+' : o.count) + '</span>' : '';
-      var enh = (o.ref && !o.ref.t0) ? '<span class="slot-count" style="font-size:7px;color:' + (o.enh > 0 ? 'var(--goldlit)' : 'var(--textdim)') + '">%' + (o.enh || 0) + '</span>' : '';
-      html += '<div class="slot ' + RAR_CLS[o.rar] + tierClass(o.tier) + (o.ref ? enhClass(o.ref.enh || 0) : '') + '" data-act="bagselect" data-id="' + o.id + '"><div class="slot-inner">' + o.svg + '</div>' + tier + count + enh + '</div>';
+      var ev = o.ref ? (o.ref.enh || 0) : 0;
+      var enh = (o.ref && !o.ref.t0) ? '<span class="slot-enh" style="font-size:7px">%' + ev + '</span>' : '';
+      var fl = ev >= 30 ? '<span class="flame"></span>' : '';
+      html += '<div class="slot ' + RAR_CLS[o.rar] + tierClass(o.tier) + (o.ref ? enhClass(ev) : '') + '" data-act="bagselect" data-id="' + o.id + '">' + fl + '<div class="slot-inner">' + o.svg + '</div>' + tier + count + enh + '</div>';
     }
     var cap = S.invCap();
     var pad = Math.max(0, Math.min(cap - list.length, 18));
@@ -752,8 +754,10 @@ SKY.UI = (function () {
       var o = list[i];
       var tier = o.tier > 0 ? '<span class="slot-tier t' + o.tier + '">' + TIER_ROMAN[o.tier] + '</span>' : '';
       var count = o.count > 1 ? '<span class="slot-count">' + (o.count > 99 ? '99+' : o.count) + '</span>' : '';
-      var enh = (o.ref && !o.ref.t0) ? '<span class="slot-count" style="font-size:7px;color:' + (o.enh > 0 ? 'var(--goldlit)' : 'var(--textdim)') + '">%' + (o.enh || 0) + '</span>' : '';
-      html += '<div class="slot ' + RAR_CLS[o.rar] + tierClass(o.tier) + (o.ref ? enhClass(o.ref.enh || 0) : '') + '" data-act="bagselect" data-id="' + o.id + '"><div class="slot-inner">' + o.svg + '</div>' + tier + count + enh + '</div>';
+      var ev = o.ref ? (o.ref.enh || 0) : 0;
+      var enh = (o.ref && !o.ref.t0) ? '<span class="slot-enh" style="font-size:7px">%' + ev + '</span>' : '';
+      var fl = ev >= 30 ? '<span class="flame"></span>' : '';
+      html += '<div class="slot ' + RAR_CLS[o.rar] + tierClass(o.tier) + (o.ref ? enhClass(ev) : '') + '" data-act="bagselect" data-id="' + o.id + '">' + fl + '<div class="slot-inner">' + o.svg + '</div>' + tier + count + enh + '</div>';
     }
     // empty slot padding
     var cap = S.invCap();
@@ -1121,9 +1125,11 @@ SKY.UI = (function () {
     for (const o of list) {
       const tier = o.tier > 0 ? `<span class="slot-tier t${o.tier}">${TIER_ROMAN[o.tier]}</span>` : '';
       const count = o.count > 1 ? `<span class="slot-count">${o.count > 99 ? '99+' : o.count}</span>` : '';
-      const enh = (o.ref && !o.ref.t0) ? `<span class="slot-count" style="font-size:7px;color:${o.enh > 0 ? 'var(--goldlit)' : 'var(--textdim)'}">%${o.enh || 0}</span>` : '';
+      const enhVal = o.ref ? (o.ref.enh || 0) : 0;
+      const enh = (o.ref && !o.ref.t0) ? `<span class="slot-enh" style="font-size:7px">%${enhVal}</span>` : '';
+      const flame = enhVal >= 30 ? '<span class="flame"></span>' : '';
       const sel = bagSel === o.id ? ' sel' : '';
-      html += `<div class="slot ${RAR_CLS[o.rar]}${tierClass(o.tier)}${o.ref ? enhClass(o.ref.enh || 0) : ''}${sel}" data-act="bagselect" data-id="${o.id}"><div class="slot-inner">${o.svg}</div>${tier}${count}${enh}</div>`;
+      html += `<div class="slot ${RAR_CLS[o.rar]}${tierClass(o.tier)}${o.ref ? enhClass(enhVal) : ''}${sel}" data-act="bagselect" data-id="${o.id}">${flame}<div class="slot-inner">${o.svg}</div>${tier}${count}${enh}</div>`;
     }
     // boş slot doldur (görsel kapasite)
     const cap = bagCat === 'all' ? S.invCap() : 0;
