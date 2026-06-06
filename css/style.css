@@ -354,8 +354,8 @@ body{background:#050403;font-family:'DM Sans',sans-serif;color:var(--text);displ
 .slot.w{border-color:#8a7866;} .slot.g{border-color:#5fb45e;} .slot.b{border-color:#5b96d8;} .slot.o{border-color:#e2913c;} .slot.r{border-color:#d95a49;}
 .slot svg{width:70%;height:70%;max-width:32px;max-height:32px;} .slot .ic{font-size:min(22px,70%);line-height:1;}
 .slot .cnt{position:absolute; bottom:1px; right:3px; font-size:9px; font-weight:700; color:#fff; text-shadow:0 1px 2px #000;}
-.slot .tg{position:absolute; top:1px; left:2px; font-size:7px; font-weight:700; color:var(--goldlit); background:rgba(0,0,0,.6); padding:0 2px; border-radius:3px;}
-.slot .enh{position:absolute; top:1px; right:2px; font-size:7px; font-weight:700; color:var(--goldlit);}
+.slot .tg{position:absolute; top:1px; left:2px; font-size:7px; font-weight:700; color:var(--goldlit); background:rgba(0,0,0,.45); padding:0 3px; border-radius:3px; opacity:.7; z-index:3;}
+.slot .enh{position:absolute; top:1px; right:2px; font-size:7px; font-weight:700; color:var(--goldlit); opacity:.7; z-index:3;}
 .slot .nm{font-size:7px; text-align:center; line-height:1; margin-top:1px; color:var(--textdim); max-height:14px; overflow:hidden;}
 .slot.empty{border-style:dashed; opacity:.5; outline:none; box-shadow:none; background:var(--slot-bg);}
 .slot.empty::before{display:none;}
@@ -507,7 +507,7 @@ input.nm:focus{outline:none; border-color:var(--gold);}
 /* ===== BAG MODAL ===== */
 .bag-modal{max-width:390px; overflow-x:hidden; overflow-y:auto;}
 .bag-equip-section{margin-bottom:12px;}
-.equip-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:6px; padding:4px; overflow:hidden;}
+.equip-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:6px; padding:6px; overflow:hidden;}
 .eq-cell{display:flex; flex-direction:column; align-items:center; gap:4px;}
 .eq-name{font-size:8px; letter-spacing:.3px; color:var(--textdim); text-transform:uppercase; font-family:'Cinzel',serif; font-weight:600; text-align:center;}
 .bag-statcard{background:rgba(0,0,0,.25); border:1px solid var(--section-border); border-radius:12px; padding:12px; margin-bottom:14px;}
@@ -663,7 +663,7 @@ input.nm:focus{outline:none; border-color:var(--gold);}
 .dg-inv-tab.active{color:var(--goldlit); border-color:var(--gold); background:rgba(200,160,48,.08);}
 .dg-inv-tab:hover{color:var(--text);}
 .dg-inv-count{font-size:9px; color:var(--textdim); font-variant-numeric:tabular-nums; flex-shrink:0;}
-.dg-inv-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:4px;}
+.dg-inv-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; padding:4px;}
 @keyframes lootPop{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
 
 /* controls */
@@ -689,7 +689,7 @@ input.nm:focus{outline:none; border-color:var(--gold);}
 .slot-inner svg{width:74%; height:74%; display:block; filter:drop-shadow(0 3px 4px rgba(0,0,0,.55));}
 .slot.empty .slot-inner svg{width:46%; height:46%; opacity:.16; filter:none;}
 /* Kademe rozeti — Demir / Çelik / Altın */
-.slot-tier{position:absolute; top:0; right:0; z-index:4; font-family:'Barlow Condensed','Cinzel',serif; font-weight:700; font-size:11px; letter-spacing:.06em; background:rgba(7,5,2,.88); padding:1px 5px 2px; line-height:14px; border-bottom-left-radius:7px; text-shadow:none;}
+.slot-tier{position:absolute; top:0; right:0; z-index:4; font-family:'Barlow Condensed','Cinzel',serif; font-weight:700; font-size:9px; letter-spacing:.06em; background:rgba(7,5,2,.65); padding:1px 4px 1px; line-height:12px; border-bottom-left-radius:6px; text-shadow:none; opacity:.85;}
 .slot-tier.t1{color:#c89a5c; border-left:1px solid rgba(200,154,92,.5); border-bottom:1px solid rgba(200,154,92,.5);}
 .slot-tier.t2{color:#d4dbe2; border-left:1px solid rgba(212,219,226,.5); border-bottom:1px solid rgba(212,219,226,.5);}
 .slot-tier.t3{color:#f3d873; border-left:1px solid rgba(243,216,115,.5); border-bottom:1px solid rgba(243,216,115,.5); box-shadow:0 0 10px color-mix(in srgb,#f3d873 65%,transparent);}
@@ -697,7 +697,7 @@ input.nm:focus{outline:none; border-color:var(--gold);}
 .slot.tier-2 .slot-inner svg{transform:scale(1.03); filter:drop-shadow(0 0 4px color-mix(in srgb,var(--mat,#d4dbe2) 55%,transparent)) drop-shadow(0 2px 3px rgba(0,0,0,.5));}
 .slot.tier-3 .slot-inner svg{transform:scale(1.06); filter:drop-shadow(0 0 8px color-mix(in srgb,var(--mat,#f3d873) 78%,transparent)) drop-shadow(0 2px 3px rgba(0,0,0,.5));}
 .slot-count{position:absolute; bottom:2px; right:5px; font-family:'Cinzel',serif; font-size:10px; font-weight:700; color:#fff; text-shadow:0 1px 3px #000,0 0 2px #000; line-height:1; z-index:5;}
-.slot-enh{position:absolute; bottom:3px; right:5px; font-family:'Barlow Condensed','JetBrains Mono',monospace; font-size:13px; font-weight:700; color:#f1ead7; text-shadow:0 1px 3px rgba(0,0,0,.92),0 0 2px rgba(0,0,0,.85); z-index:5;}
+.slot-enh{position:absolute; bottom:1px; right:3px; font-family:'Barlow Condensed','JetBrains Mono',monospace; font-size:9px; font-weight:700; color:#f1ead7; text-shadow:0 1px 3px rgba(0,0,0,.92),0 0 2px rgba(0,0,0,.85); z-index:5; opacity:.8;}
 .slot.sel{outline:2px solid var(--goldlit); outline-offset:3px; box-shadow:0 0 18px rgba(200,160,48,.5);}
 
 /* ===== BANKA MODAL ===== */
@@ -843,7 +843,7 @@ input.nm:focus{outline:none; border-color:var(--gold);}
 /* Yükseltme yüzdesi rengi */
 .slot.enh30 .slot-enh{color:#ffce86;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 8px rgba(226,146,52,.6);}
 .slot.enh60 .slot-enh{color:#ffba6a;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 9px rgba(255,138,42,.7);}
-.slot.enh90 .slot-enh{color:#ffd27a;font-size:14px;text-shadow:0 1px 4px rgba(0,0,0,.92),0 0 12px rgba(255,120,30,.9);}
+.slot.enh90 .slot-enh{color:#ffd27a;font-size:10px;text-shadow:0 1px 4px rgba(0,0,0,.92),0 0 12px rgba(255,120,30,.9);}
 /* Ikon glow */
 .slot.enh30 .slot-inner svg,.slot.enh30 .slot-inner .emoji{filter:drop-shadow(0 0 4px rgba(232,146,51,.5));}
 .slot.enh60 .slot-inner svg,.slot.enh60 .slot-inner .emoji{filter:drop-shadow(0 0 5px rgba(255,150,55,.5)) drop-shadow(0 2px 3px rgba(0,0,0,.5));}
