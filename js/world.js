@@ -18,9 +18,9 @@ SKY.W = (function () {
 
   // ---- Grid pozisyon sistemi (node placement) ----
   const GRID_POS = [];
-  for (let row = 0; row < 4; row++) {
-    for (let col = 0; col < 4; col++) {
-      GRID_POS.push({ x: 10 + col * 22 + (row % 2) * 11, y: 10 + row * 20 });
+  for (let row = 0; row < 5; row++) {
+    for (let col = 0; col < 5; col++) {
+      GRID_POS.push({ x: 8 + col * 18 + (row % 2) * 9, y: 8 + row * 16 });
     }
   }
   let usedPos = new Set();
@@ -38,17 +38,25 @@ SKY.W = (function () {
     }
     return false;
   }
+  var MIN_NODE_DIST = 12; // minimum % distance between nodes to prevent overlap
+  function tooCloseToExisting(x, y) {
+    for (var i = 0; i < nodes.length; i++) {
+      var dx = x - nodes[i].x, dy = y - nodes[i].y;
+      if (Math.sqrt(dx*dx + dy*dy) < MIN_NODE_DIST) return true;
+    }
+    return false;
+  }
   function getUniquePos() {
-    var available = GRID_POS.filter(function(p, i) { return !usedPos.has(i) && !isExcluded(p.x, p.y); });
+    var available = GRID_POS.filter(function(p, i) { return !usedPos.has(i) && !isExcluded(p.x, p.y) && !tooCloseToExisting(p.x, p.y); });
     if (available.length) {
       var idx = GRID_POS.indexOf(available[Math.floor(Math.random() * available.length)]);
       usedPos.add(idx);
       var p = GRID_POS[idx];
-      return { x: p.x + (Math.random() - 0.5) * 4, y: p.y + (Math.random() - 0.5) * 4 };
+      return { x: p.x + (Math.random() - 0.5) * 2, y: p.y + (Math.random() - 0.5) * 2 };
     }
-    for (var tries = 0; tries < 20; tries++) {
+    for (var tries = 0; tries < 30; tries++) {
       var rx = 5 + Math.random() * 85, ry = 8 + Math.random() * 75;
-      if (!isExcluded(rx, ry)) return { x: rx, y: ry };
+      if (!isExcluded(rx, ry) && !tooCloseToExisting(rx, ry)) return { x: rx, y: ry };
     }
     return { x: 8 + Math.random() * 30, y: 10 + Math.random() * 30 };
   }

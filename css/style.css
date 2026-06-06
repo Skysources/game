@@ -181,7 +181,7 @@ body{background:#050403;font-family:'DM Sans',sans-serif;color:var(--text);displ
 .g-stat-chip span{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--goldlit);}
 
 /* Gather button — top left of modal */
-.g-gather-btn{width:100%; padding:10px 18px; border-radius:10px; background:linear-gradient(180deg,rgba(200,160,48,.18),rgba(200,160,48,.06)); border:1.5px solid var(--gold); color:var(--goldlit); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:all .2s; box-shadow:0 2px 10px rgba(200,160,48,.15); margin:10px 0 2px;}
+.g-gather-btn{width:100%; padding:10px 18px; border-radius:10px; background:linear-gradient(180deg,rgba(200,160,48,.18),rgba(200,160,48,.06)); border:1.5px solid var(--gold); color:var(--goldlit); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:all .2s; box-shadow:0 2px 10px rgba(200,160,48,.15); margin:12px 0;}
 .g-gather-btn:hover{background:linear-gradient(180deg,rgba(200,160,48,.28),rgba(200,160,48,.12)); box-shadow:0 2px 16px rgba(200,160,48,.35);}
 .g-gather-btn:active{transform:scale(.97);}
 .g-gather-btn .g-gather-ico{font-size:16px; line-height:1;}

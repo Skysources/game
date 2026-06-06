@@ -948,12 +948,6 @@
     // çanta sekmeleri (data-cat)
     const tab = e.target.closest('#bagTabs .tab');
     if (tab) { UI.setBagCat(tab.dataset.cat); return; }
-    // dungeon inventory tabs
-    const dgTab = e.target.closest('.dg-inv-tab[data-dcat]');
-    if (dgTab) { UI.setDgInvCat(dgTab.dataset.dcat); return; }
-    // gather inventory tabs
-    var gTab = e.target.closest('.dg-inv-tab[data-gcat]');
-    if (gTab) { UI.setGatherInvCat(gTab.dataset.gcat); return; }
     // (chat tabs removed — channel switching via settings dropdown)
     // item popover dışına tıklama → kapat (slot ve popover hariç)
     const pop = $('#itemPop');

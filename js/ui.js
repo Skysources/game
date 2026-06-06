@@ -591,7 +591,7 @@ SKY.UI = (function () {
       html += '<div class="dg-fcard ' + FLOOR_CLS[i] + (locked ? ' locked' : '') + (expanded ? ' expanded' : '') + '" ' + (locked ? '' : 'data-act="dgfloor" data-f="' + i + '"') + '>';
       html += '<div class="dg-fcard-head"><div class="dg-fcard-num"><div class="big">' + (i+1) + '</div><div class="lbl">' + t('dg.floor') + '</div></div>';
       html += '<div class="dg-fcard-info"><div class="dg-fcard-name">' + FLOOR_NAMES[i] + (locked ? ' 🔒' : '') + '</div>';
-      html += '<div class="dg-fcard-sub">Min ' + Math.round(fcp * 0.5) + ' CP · ' + mobInfo.n + '</div></div>';
+      html += '<div class="dg-fcard-sub">Min ' + Math.round(fcp * 0.5) + ' CP</div></div>';
       html += '<div class="dg-fcard-cp">' + fmt(fcp) + ' CP</div></div>';
       if (expanded) {
         var combatDur = DUN.combatDuration();
@@ -690,11 +690,10 @@ SKY.UI = (function () {
     container.innerHTML = html;
   }
 
-  let gatherInvCat = 'all';
   function renderGatherInv() {
     var grid = $('#gInvGrid');
     if (!grid) return;
-    var list = buildBagList().filter(function(o) { return gatherInvCat === 'all' || o.cat === gatherInvCat; });
+    var list = buildBagList();
     var html = '';
     for (var i = 0; i < list.length; i++) {
       var o = list[i];
@@ -703,24 +702,17 @@ SKY.UI = (function () {
       var enh = (o.ref && !o.ref.t0) ? '<span class="slot-count" style="font-size:7px;color:' + (o.enh > 0 ? 'var(--goldlit)' : 'var(--textdim)') + '">%' + (o.enh || 0) + '</span>' : '';
       html += '<div class="slot ' + RAR_CLS[o.rar] + tierClass(o.tier) + (o.ref ? enhClass(o.ref.enh || 0) : '') + '" data-act="bagselect" data-id="' + o.id + '"><div class="slot-inner">' + o.svg + '</div>' + tier + count + enh + '</div>';
     }
-    var cap = gatherInvCat === 'all' ? S.invCap() : 0;
+    var cap = S.invCap();
     var pad = Math.max(0, Math.min(cap - list.length, 18));
     for (var k = 0; k < pad; k++) html += '<div class="slot empty"><div class="slot-inner">' + (ICON.empty_sword || '') + '</div></div>';
     grid.innerHTML = html;
     var countEl = $('#gInvCount');
     if (countEl) countEl.textContent = list.length + '/' + S.invCap();
   }
-  function setGatherInvCat(c) {
-    gatherInvCat = c;
-    $$('#gatherModal .dg-inv-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.gcat === c); });
-    renderGatherInv();
-  }
-
-  let dgInvCat = 'all';
   function renderDgInv() {
     const grid = $('#dgInvGrid');
     if (!grid) return;
-    const list = buildBagList().filter(function(o) { return dgInvCat === 'all' || o.cat === dgInvCat; });
+    const list = buildBagList();
     let html = '';
     for (var i = 0; i < list.length; i++) {
       var o = list[i];
@@ -730,17 +722,12 @@ SKY.UI = (function () {
       html += '<div class="slot ' + RAR_CLS[o.rar] + tierClass(o.tier) + (o.ref ? enhClass(o.ref.enh || 0) : '') + '" data-act="bagselect" data-id="' + o.id + '"><div class="slot-inner">' + o.svg + '</div>' + tier + count + enh + '</div>';
     }
     // empty slot padding
-    var cap = dgInvCat === 'all' ? S.invCap() : 0;
+    var cap = S.invCap();
     var pad = Math.max(0, Math.min(cap - list.length, 18));
     for (var k = 0; k < pad; k++) html += '<div class="slot empty"><div class="slot-inner">' + (ICON.empty_sword || '') + '</div></div>';
     grid.innerHTML = html;
     var countEl = $('#dgInvCount');
     if (countEl) countEl.textContent = list.length + '/' + S.invCap();
-  }
-  function setDgInvCat(c) {
-    dgInvCat = c;
-    $$('#dungeonModal .dg-inv-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.dcat === c); });
-    renderDgInv();
   }
 
   function addDungeonLoot(loot, isBoss) {
@@ -2576,7 +2563,7 @@ SKY.UI = (function () {
     $, $$, esc, fmt, toast, show, renderTop, renderMap, renderWorld, refreshIfMap,
     openGather, setGatherUI, addGatherDrops, gatherProgress, getGatherNode,
     openDungeon, renderDungeonList, renderDungeonSelect, renderFight, enterDungeonView,
-    fightTickUI, pushFightLog, addDungeonLoot, dungeonMobDeath, updateMobDisplay, renderBossQueue, renderDgInv, setDgInvCat, renderGatherInv, setGatherInvCat,
+    fightTickUI, pushFightLog, addDungeonLoot, dungeonMobDeath, updateMobDisplay, renderBossQueue, renderDgInv, renderGatherInv,
     showDungeonSummary, isDunAutoOn, toggleDunAuto, getDunExpanded, setDunExpanded, setDunBiome, getDunSummary,
     openTravel, getTravelTarget, openSheet,
     openBag, renderBag, bagSelect, setBagCat, toggleSort, clearBagSel, closePop, openBldModal, compareItem,
