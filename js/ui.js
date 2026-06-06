@@ -61,6 +61,7 @@ SKY.UI = (function () {
     st.className = 'zone-status ' + cls;
     st.textContent = '● ' + (pvp === 'red' ? t('zone.pvp_red') : pvp === 'blue' ? t('zone.pvp_blue') : t('zone.safe'));
     $('#sCP').textContent = fmt(E.baseCP(P.equipped));
+    var sGoldHud = $('#sGold'); if (sGoldHud) sGoldHud.textContent = fmt(P.gold);
     // gems display
     const ge = $('#sGems');
     if (ge) ge.textContent = fmt(P.gems || 0);
@@ -1010,6 +1011,7 @@ SKY.UI = (function () {
     $('#wNum').style.color = wPct > 85 ? '#e87040' : wPct > 60 ? '#e8c050' : '#8ad048';
     $('#sNum').textContent = sUsed + '/' + sCap + ' (' + t('bag.slot_label') + ' ' + S.invBagCount() + '/' + S.MAX_SLOTS + ')';
     $('#goldVal').textContent = fmt(P.gold) + ' 💰';
+    var sGoldEl = $('#sGold'); if (sGoldEl) sGoldEl.textContent = fmt(P.gold);
     // statlar
     renderCharStats();
     // kuşanım paperdoll
@@ -2452,17 +2454,17 @@ SKY.UI = (function () {
     // banka ve bag artık modal — show() ile açılmaz
     renderTop();
     // Hide chat/inv on menu & world screens; PvP icon only on map (zone)
-    var inv = $('#invFloatBtn'), chat = $('#chatBar'), evt = $('#evtPvpIcon');
+    var hud = $('#hudFloat'), chat = $('#chatBar'), evt = $('#evtPvpIcon');
     var hideChat = (screen === 'menu' || screen === 'world');
     if (screen === 'menu') {
-      if (inv) inv.style.display = 'none';
+      if (hud) hud.style.display = 'none';
       if (evt) evt.style.display = 'none';
     } else if (screen === 'map') {
-      if (inv) inv.style.display = '';
+      if (hud) hud.style.display = '';
       // evt icon is managed by EVT.tick() — allow it on map
     } else {
       // world or other screens
-      if (inv) inv.style.display = '';
+      if (hud) hud.style.display = '';
       if (evt) evt.style.display = 'none';
     }
     if (chat) chat.style.display = hideChat ? 'none' : '';

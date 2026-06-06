@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>SKYZONE · Idle MMO</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=7869">
+<link rel="stylesheet" href="css/style.css?v=7870">
 </head>
 <body>
 <div class="phone">
@@ -96,9 +96,7 @@
       <div class="sb-right">
         <div class="player-stats">
           <div class="stat-chip"><span>⚡</span><span class="val" id="sCP">0</span> CP</div>
-        </div>
-        <div class="nav-icons">
-          <button class="nav-ico menu-btn" data-act="gomenu" title="Menu"><svg viewBox="0 0 40 40" width="18" height="18"><g fill="currentColor"><rect x="7" y="7" width="11" height="11" rx="3.4"/><rect x="22" y="7" width="11" height="11" rx="3.4"/><rect x="7" y="22" width="11" height="11" rx="3.4"/><rect x="22" y="22" width="11" height="11" rx="3.4"/></g></svg></button>
+          <div class="stat-chip gold-chip"><svg class="gold-ico" viewBox="0 0 20 20" width="14" height="14"><circle cx="10" cy="10" r="9" fill="url(#goldCoinG)"/><circle cx="10" cy="10" r="7.5" fill="none" stroke="#a07020" stroke-width=".8" opacity=".5"/><text x="10" y="14.5" text-anchor="middle" font-family="Cinzel,serif" font-weight="900" font-size="12" fill="#7a4a10" opacity=".7">S</text><text x="10" y="14" text-anchor="middle" font-family="Cinzel,serif" font-weight="900" font-size="12" fill="#fff8e0">S</text></svg><span class="val" id="sGold">0</span></div>
         </div>
       </div>
       <!-- gems/premium moved to menu; hidden refs kept for JS compat -->
@@ -143,8 +141,11 @@
 
   <!-- ============ MENU SCREEN ============ -->
   <div class="screen" id="screen-menu">
-    <button class="w-back" data-act="gomap" data-t="menu.back">◂ BACK</button>
-    <div class="m-header"><div class="m-title" data-t="menu.title">MENU</div><div class="m-sub" data-t="menu.sub">All services · events</div></div>
+    <div class="m-topbar">
+      <button class="w-back" data-act="gomap" data-t="menu.back">◂ BACK</button>
+      <div class="m-header"><div class="m-title" data-t="menu.title">MENU</div><div class="m-sub" data-t="menu.sub">All services · events</div></div>
+      <div class="m-topbar-spacer"></div>
+    </div>
     <div class="m-content">
       <div class="m-events">
         <div class="m-event">
@@ -300,8 +301,15 @@
     </div>
   </div>
 
-  <!-- Floating inventory button -->
-  <div class="inv-float-btn" id="invFloatBtn" data-act="bag"><svg viewBox="0 0 48 48" width="26" height="26"><g fill="currentColor" color="#e6c068"><path d="M17 17 Q17 9 24 9 Q31 9 31 17" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/><path d="M12 17 H36 L38.5 38 Q38.5 42 34.5 42 H13.5 Q9.5 42 9.5 38 Z"/><path d="M12 17 H36 L34.2 26 Q24 31 13.8 26 Z" fill="#000" opacity=".28"/><rect x="21" y="27" width="6" height="8" rx="2" fill="#000" opacity=".32"/></g></svg></div>
+  <!-- Floating HUD buttons (bottom-right) -->
+  <div class="hud-float" id="hudFloat">
+    <div class="hud-float-btn" id="invFloatBtn" data-act="bag">
+      <svg viewBox="0 0 48 48" width="24" height="24"><defs><linearGradient id="goldCoinG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffd860"/><stop offset="100%" stop-color="#b8860b"/></linearGradient></defs><g fill="currentColor" color="#e6c068"><path d="M17 17 Q17 9 24 9 Q31 9 31 17" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/><path d="M12 17 H36 L38.5 38 Q38.5 42 34.5 42 H13.5 Q9.5 42 9.5 38 Z"/><path d="M12 17 H36 L34.2 26 Q24 31 13.8 26 Z" fill="#000" opacity=".28"/><rect x="21" y="27" width="6" height="8" rx="2" fill="#000" opacity=".32"/></g></svg>
+    </div>
+    <div class="hud-float-btn" id="menuFloatBtn" data-act="gomenu">
+      <svg viewBox="0 0 40 40" width="22" height="22"><g fill="currentColor"><rect x="7" y="7" width="11" height="11" rx="3.4"/><rect x="22" y="7" width="11" height="11" rx="3.4"/><rect x="7" y="22" width="11" height="11" rx="3.4"/><rect x="22" y="22" width="11" height="11" rx="3.4"/></g></svg>
+    </div>
+  </div>
 
   <!-- CHAT BUBBLE -->
   <div class="chat-bubble" id="chatBar">
@@ -462,7 +470,6 @@
 <div class="modal-bg" id="gatherModal" data-mb="gatherModal">
   <div class="modal" style="position:relative">
     <button class="modal-close" data-close="gatherModal">✕</button>
-    <button class="g-gather-btn g-gather-topleft" id="gAction" data-act="togglegather"><span class="g-gather-ico">⛏</span><span class="g-gather-txt" data-t="gather.gather_btn">GATHER</span></button>
     <div class="modal-title" data-t="gather.title">⛏ Gathering</div>
     <div class="modal-subtitle" data-t="gather.subtitle">Node resource details</div>
     <div class="g-itemcard">
@@ -475,6 +482,7 @@
       </div>
       <div class="g-count" id="mCount">99 / 99</div>
     </div>
+    <button class="g-gather-btn" id="gAction" data-act="togglegather"><span class="g-gather-ico">⛏</span><span class="g-gather-txt" data-t="gather.gather_btn">GATHER</span></button>
     <div class="g-section">
       <div class="g-section-h" data-t="gather.active_bonus">Active Bonuses</div>
       <div class="g-bonus-grid">
@@ -646,29 +654,29 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-<script src="js/lang.js?v=7869"></script>
-<script src="js/firebase-init.js?v=7869"></script>
+<script src="js/lang.js?v=7870"></script>
+<script src="js/firebase-init.js?v=7870"></script>
 
-<script src="js/art.js?v=7869"></script>
-<script src="js/nodeart.js?v=7869"></script>
-<script src="js/icons.js?v=7869"></script>
-<script src="js/eqicons.js?v=7869"></script>
-<script src="js/gather-icons.js?v=7869"></script>
-<script src="js/mobsvg.js?v=7869"></script>
-<script src="js/biomemobs.js?v=7869"></script>
-<script src="js/mounts.js?v=7869"></script>
-<script src="js/stones.js?v=7869"></script>
-<script src="js/enhstones.js?v=7869"></script>
-<script src="js/zoneimg.js?v=7869"></script>
-<script src="js/data.js?v=7869"></script>
-<script src="js/engine.js?v=7869"></script>
-<script src="js/state.js?v=7869"></script>
-<script src="js/world.js?v=7869"></script>
-<script src="js/dungeon.js?v=7869"></script>
-<script src="js/craft.js?v=7869"></script>
-<script src="js/chat.js?v=7869"></script>
-<script src="js/ui.js?v=7869"></script>
-<script src="js/events.js?v=7869"></script>
-<script src="js/game.js?v=7869"></script>
+<script src="js/art.js?v=7870"></script>
+<script src="js/nodeart.js?v=7870"></script>
+<script src="js/icons.js?v=7870"></script>
+<script src="js/eqicons.js?v=7870"></script>
+<script src="js/gather-icons.js?v=7870"></script>
+<script src="js/mobsvg.js?v=7870"></script>
+<script src="js/biomemobs.js?v=7870"></script>
+<script src="js/mounts.js?v=7870"></script>
+<script src="js/stones.js?v=7870"></script>
+<script src="js/enhstones.js?v=7870"></script>
+<script src="js/zoneimg.js?v=7870"></script>
+<script src="js/data.js?v=7870"></script>
+<script src="js/engine.js?v=7870"></script>
+<script src="js/state.js?v=7870"></script>
+<script src="js/world.js?v=7870"></script>
+<script src="js/dungeon.js?v=7870"></script>
+<script src="js/craft.js?v=7870"></script>
+<script src="js/chat.js?v=7870"></script>
+<script src="js/ui.js?v=7870"></script>
+<script src="js/events.js?v=7870"></script>
+<script src="js/game.js?v=7870"></script>
 </body>
 </html>
