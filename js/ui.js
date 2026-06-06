@@ -26,7 +26,17 @@ SKY.UI = (function () {
   function fmt(n) { return Math.round(n).toLocaleString('tr-TR'); }
   function rarColor(i) { return D.RARITY[i].color; }
   function imgUrl(key) { return IMG[key] ? "url('data:image/jpeg;base64," + IMG[key] + "')" : 'none'; }
-  function matSVG(family, tier) { return ART.mats['item-' + family + '-' + tier] || '<span class="emoji">📦</span>'; }
+  // Material family key mapping (game uses Turkish keys internally)
+  var _MATFAM = {odun:'wood',balik:'fish',tas:'stone',cevher:'ore',bitki:'herb',deri:'wood'};
+  function matSVG(family, tier) {
+    // Use dynamic generator with RESPAL palette if available
+    var gk = _MATFAM[family] || family;
+    var GP = window.GICONS, RP = window.SKY_RESPAL;
+    if (GP && GP[gk] && RP && RP[gk] && RP[gk][tier]) {
+      return '<svg viewBox="0 0 120 120">' + GP[gk](RP[gk][tier]) + '</svg>';
+    }
+    return ART.mats['item-' + family + '-' + tier] || '<span class="emoji">📦</span>';
+  }
   function nodeSVG(family, tier) { return ART.nodes[family + '-' + tier] || '<span class="emoji">⛰️</span>'; }
 
   function toast(msg, ms = 1800) {
@@ -904,14 +914,23 @@ SKY.UI = (function () {
   const ALET_MAP = { alet: 'kazma' };
   function enhClass(enh) { return enh >= 90 ? ' enh90' : enh >= 60 ? ' enh60' : enh >= 30 ? ' enh30' : ''; }
   function tierClass(tier) { return tier > 0 ? ' tier-' + tier : ''; }
+  // Equipment type → ICONS key mapping
+  var _EQMAP = {silah:'sword',kask:'helmet',zirh:'armor',pelerin:'cape',eldiven:'gloves',bot:'boots',binek:'mount',canta:'bag',kazma:'tool',balta:'tool',olta:'tool',set:'gatherset',alet:'tool'};
   function eqEmoji(item) {
     // mount items (kind: 'mount') always use binek icons
     const type = (item.kind === 'mount') ? 'binek' : item.type;
-    // tier-based SVG ikonları (skyzone-ekipman.html)
+    const tier = item.tier || 1;
+    // Try dynamic ICONS generators first (Item Sistemi Belgesi palette)
+    var dynKey = _EQMAP[type] || _EQMAP[ALET_MAP[type]] || type;
+    var GI = window.ICONS, EP = window.SKY_EQPAL;
+    if (GI && GI[dynKey] && EP && EP[tier]) {
+      return '<svg viewBox="0 0 120 120">' + GI[dynKey](EP[tier]) + '</svg>';
+    }
+    // Fallback to pre-baked tier SVGs
     const eqKey = type === 'pelerin' ? 'cape' : (ALET_MAP[type] || type);
     const tierArr = EQIC[eqKey];
     if (tierArr) {
-      const ti = Math.max(0, Math.min(2, (item.tier || 1) - 1));
+      const ti = Math.max(0, Math.min(2, tier - 1));
       return tierArr[ti];
     }
     return ICON[EQ_ICON[type]] || ('<span style="font-size:26px">' + (item.icon || '🐎') + '</span>');
