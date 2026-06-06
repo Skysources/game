@@ -1,0 +1,67 @@
+{
+  "rules": {
+    "players": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "usernames": {
+      "$username": {
+        ".read": true,
+        ".write": "auth != null && (!data.exists() || data.child('uid').val() === auth.uid)"
+      }
+    },
+    "online": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "chat": {
+      ".read": "auth != null",
+      "pm": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null"
+        }
+      },
+      "$channel": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "friends": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null"
+      }
+    },
+    "friendRequests": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null"
+      }
+    },
+    "world": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "leaderboard": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "sessions": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "warState": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}

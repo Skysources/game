@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>SKYZONE · Idle MMO</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=7860">
+</head>
+<body>
+<div class="phone">
+
+  <!-- ============ LOGIN ============ -->
+  <div class="screen" id="screen-login">
+    <div class="auth-wrap">
+      <div class="brand">SKYZONE</div>
+      <div class="muted small" style="letter-spacing:3px;font-family:'Cinzel',serif;text-transform:uppercase">Idle MMO</div>
+      <div class="auth-panel">
+        <div class="auth-title" data-t="auth.login">Giriş Yap</div>
+        <input class="auth-input" id="loginUser" data-t="auth.username" placeholder="Kullanıcı adı" maxlength="20" autocomplete="username" type="text">
+        <input class="auth-input" id="loginPass" data-t="auth.password" placeholder="Şifre" type="password" maxlength="32" autocomplete="current-password">
+        <button class="btn full auth-btn" id="loginBtn" data-t="auth.login_btn">GİRİŞ YAP</button>
+        <div class="auth-link-row"><a class="auth-link" id="forgotLink" data-t="auth.forgot">Şifremi Unuttum</a></div>
+        <div class="auth-link-row" style="margin-top:14px"><span data-t="auth.no_account">Hesabın yok mu?</span> <a class="auth-link" id="goRegister" data-t="auth.register_btn">ÜYE OL</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ REGISTER ============ -->
+  <div class="screen" id="screen-register">
+    <div class="auth-wrap">
+      <div class="brand">SKYZONE</div>
+      <div class="muted small" style="letter-spacing:3px;font-family:'Cinzel',serif;text-transform:uppercase">Idle MMO</div>
+      <div class="auth-panel">
+        <div class="auth-title" data-t="auth.register">Üye Ol</div>
+        <input class="auth-input" id="regUser" data-t="auth.username" placeholder="Kullanıcı adı" maxlength="20" autocomplete="username">
+        <input class="auth-input" id="regPass" data-t="auth.password" placeholder="Şifre" type="password" maxlength="32" autocomplete="new-password">
+        <input class="auth-input" id="regPass2" data-t="auth.password2" placeholder="Şifre tekrar" type="password" maxlength="32" autocomplete="new-password">
+        <input class="auth-input" id="regEmail" data-t="auth.email_opt" placeholder="E-posta (opsiyonel — şifre sıfırlama için)" maxlength="60" autocomplete="email">
+        <button class="btn full auth-btn" id="registerBtn" data-t="auth.register_btn">ÜYE OL</button>
+        <div class="auth-link-row" style="margin-top:14px"><span data-t="auth.has_account">Zaten üye misin?</span> <a class="auth-link" id="goLogin" data-t="auth.login_btn">GİRİŞ YAP</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CHARACTER CREATION ============ -->
+  <div class="screen" id="screen-charcreate">
+    <div class="auth-wrap">
+      <div class="brand" style="font-size:28px">SKYZONE</div>
+      <div class="auth-panel" style="max-width:400px">
+        <div class="auth-title" data-t="char.create">Karakter Oluştur</div>
+        <input class="auth-input" id="charNameInput" data-t="char.name" placeholder="Karakter adı" maxlength="16">
+        <div class="create-lbl" style="margin-top:4px" data-t="char.pick_city">ŞEHRİNİ & KAVMİNİ SEÇ</div>
+        <div class="muted small" style="margin-bottom:6px" data-t="char.city_hint">Seçtiğin şehir kavmini belirler. Kavim Savaşı'nda kavmin için savaşırsın!</div>
+        <div class="city-pick">
+          <div class="city-card" data-city="kar">
+            <div class="city-card-head"><span class="cico">❄️</span><div><div class="cname" style="color:var(--c-kar)" data-t="city.kar">Kar Şehri</div><div class="muted small"><span data-t="char.cold_region">Soğuk dağlık bölge</span> · <b style="color:#7ac0d8" data-t="char.kar_tribe">Kar Kavmi</b></div></div></div>
+            <div class="city-card-res"><span class="city-res-tag kar" data-t="char.ore_bonus">⛏ Cevher +%30</span><span class="city-res-tag kar" data-t="char.fish_bonus">🐟 Balık +%20</span></div>
+          </div>
+          <div class="city-card" data-city="orman">
+            <div class="city-card-head"><span class="cico">🌲</span><div><div class="cname" style="color:var(--c-orman)" data-t="city.orman">Orman Şehri</div><div class="muted small"><span data-t="char.green_region">Yeşil orman bölge</span> · <b style="color:#5aaa3a" data-t="char.orman_tribe">Orman Kavmi</b></div></div></div>
+            <div class="city-card-res"><span class="city-res-tag orman" data-t="char.wood_bonus">🪵 Odun +%30</span><span class="city-res-tag orman" data-t="char.herb_bonus">🌿 Bitki +%20</span></div>
+          </div>
+          <div class="city-card" data-city="col">
+            <div class="city-card-head"><span class="cico">🏜️</span><div><div class="cname" style="color:var(--c-col)" data-t="city.col">Çöl Şehri</div><div class="muted small"><span data-t="char.hot_region">Sıcak çöl bölge</span> · <b style="color:#d8a040" data-t="char.col_tribe">Çöl Kavmi</b></div></div></div>
+            <div class="city-card-res"><span class="city-res-tag col" data-t="char.stone_bonus">🪨 Taş +%30</span><span class="city-res-tag col" data-t="char.hide_bonus">🦴 Deri +%20</span></div>
+          </div>
+        </div>
+        <button class="btn full auth-btn" id="charCreateBtn" style="margin-top:8px" data-t="char.create_btn">KARAKTERİ OLUŞTUR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CHARACTER SELECT ============ -->
+  <div class="screen" id="screen-charselect">
+    <div class="auth-wrap">
+      <div class="brand" style="font-size:28px">SKYZONE</div>
+      <div class="auth-panel" style="max-width:400px">
+        <div class="auth-title" data-t="char.select">Karakter Seç</div>
+        <div id="charSelectList" class="char-select-list"></div>
+        <button class="btn full auth-btn ghost" id="newCharBtn" style="margin-top:10px" data-t="char.new_btn">+ Yeni Karakter Oluştur</button>
+        <div class="auth-link-row" style="margin-top:14px"><a class="auth-link" id="logoutLink" data-t="auth.logout">Çıkış Yap</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MAP SCREEN ============ -->
+  <div class="screen" id="screen-map">
+    <div class="statusbar">
+      <div class="zone-tap" data-act="goworld">
+        <div class="zone-name" id="zName">—</div>
+        <div class="zone-tier" id="zTier"></div>
+        <div class="zone-status safe" id="zStatus">● Safe</div>
+      </div>
+      <div class="buff-squares" id="buffSquares"></div>
+      <div class="sb-right">
+        <div class="player-stats">
+          <div class="stat-chip"><span>⚡</span><span class="val" id="sCP">0</span> CP</div>
+        </div>
+        <div class="nav-icons">
+          <button class="nav-ico menu-btn" data-act="gomenu" title="Menu">☰</button>
+        </div>
+      </div>
+      <!-- gems/premium moved to menu; hidden refs kept for JS compat -->
+      <span id="sGems" style="display:none">0</span>
+      <span id="premBadge" style="display:none"></span>
+    </div>
+    <div class="buffbar" id="buffbar"></div>
+
+    <div class="map-viewport" id="mapViewport">
+      <div class="map-canvas" id="mapCanvas">
+        <div class="map-bg" id="mapBg"></div>
+        <div class="dungeon-entrance" id="dungeonEntrance" style="top:31%;left:48%">
+          <div class="dungeon-icon">🏰</div>
+          <div class="dungeon-banner">5/5</div>
+          <div class="dungeon-label" id="dgLabel">DUNGEON</div>
+        </div>
+      </div>
+      <!-- mapHint removed in v3401 refactor -->
+    </div>
+
+  </div>
+
+  <!-- ============ WORLD MAP ============ -->
+  <div class="screen" id="screen-world">
+    <div class="w-hdr">
+      <button class="w-back" data-act="gomap" data-t="world.back">◂ BACK</button>
+      <div class="w-hdr-center"><div class="w-title" data-t="world.title">WORLD MAP</div><div class="w-sub" data-t="world.sub">3 cities · 6 zones · 1 center</div></div>
+    </div>
+    <div class="w-scroll">
+      <div class="w-map" id="wMap">
+        <svg class="w-links" id="wLinks" viewBox="0 0 430 620"></svg>
+        <div class="w-nodes" id="wNodes"></div>
+      </div>
+    </div>
+    <div class="w-legend">
+      <div class="w-lg" style="--wlc:var(--gold)"><i></i><span><b data-t="world.legend_city">City</b><small data-t="world.city_badge">CITY</small></span></div>
+      <div class="w-lg" style="--wlc:#5cc06f"><i></i><span><b>T1</b><small>Safe</small></span></div>
+      <div class="w-lg" style="--wlc:#5a9bdf"><i></i><span><b>T2</b><small>PVP</small></span></div>
+      <div class="w-lg" style="--wlc:#e3564b"><i></i><span><b>T3</b><small data-t="world.t3_center">Center</small></span></div>
+    </div>
+  </div>
+
+  <!-- ============ MENU SCREEN ============ -->
+  <div class="screen" id="screen-menu">
+    <button class="w-back" data-act="gomap" data-t="menu.back">◂ BACK</button>
+    <div class="m-header"><div class="m-title" data-t="menu.title">MENU</div><div class="m-sub" data-t="menu.sub">All services · events</div></div>
+    <div class="m-content">
+      <div class="m-events">
+        <div class="m-event">
+          <div class="m-event-h"><div class="m-event-title" data-t="menu.daily_event">Daily Event</div><div class="m-event-ico">🎁</div></div>
+          <ul class="m-event-list"><li><span data-t="menu.stone_speed">Stone gathering speed</span> <span class="bonus">+20%</span></li><li><span data-t="menu.craft_power">Craft production power</span> <span class="bonus">+10%</span></li></ul>
+        </div>
+        <div class="m-event">
+          <div class="m-event-h"><div class="m-event-title" data-t="menu.statistics">Statistics</div><div class="m-event-ico">📊</div></div>
+          <div class="m-event-list" id="menuStats"></div>
+        </div>
+      </div>
+      <div class="m-grid">
+        <div class="m-left">
+          <div class="m-btn" data-act="charinfo"><div class="ico">🧙</div><span data-t="menu.character">Karakter</span></div>
+          <div class="m-btn" data-act="magaza"><div class="ico">💎</div><span data-t="menu.shop">Mağaza</span></div>
+          <div class="m-btn" data-act="war"><div class="ico">⚔️</div><span data-t="menu.war">Savaş</span></div>
+          <div class="m-btn" data-act="mailbox"><div class="ico">📩</div><span data-t="menu.mail">Posta</span></div>
+          <div class="m-btn" data-act="friends"><div class="ico">👥</div><span data-t="menu.friends">Arkadaşlar</span></div>
+          <div class="m-btn" data-act="alliance"><div class="ico">🛡️</div><span data-t="menu.alliance">İttifak</span></div>
+          <div class="m-btn" data-act="ranking"><div class="ico">🏆</div><span data-t="menu.ranking">Sıralama</span></div>
+          <div class="m-btn" data-act="settings"><div class="ico">⚙️</div><span data-t="menu.settings">Ayarlar</span></div>
+          <div class="m-btn logout" data-act="logout"><div class="ico">🚪</div><span data-t="auth.logout">Çıkış Yap</span></div>
+        </div>
+        <div class="m-right">
+          <div class="m-card atolye" data-act="atolye"><div><div class="m-card-name" data-t="menu.workshop">Atölye</div><div class="m-card-sub">CRAFTING</div></div><div class="m-card-vis">🔨</div><div class="m-card-glow"></div></div>
+          <div class="m-card banka" data-act="banka"><div><div class="m-card-name" data-t="menu.bank">Banka</div><div class="m-card-sub">BANK</div></div><div class="m-card-vis">🏦</div><div class="m-card-glow"></div></div>
+          <div class="m-card pazaryeri" data-act="pazar"><div><div class="m-card-name" data-t="menu.market">Pazaryeri</div><div class="m-card-sub">TRADE HOUSE</div></div><div class="m-card-vis">🏪</div><div class="m-card-glow"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RANKING MODAL ===== -->
+  <div class="modal-bg" id="rankModal" data-mb="rankModal">
+    <div class="modal" style="max-width:420px">
+      <button class="modal-close" data-close="rankModal">✕</button>
+      <div class="modal-title" data-t="modal.ranking_title">🏆 Ranking</div>
+      <div class="modal-subtitle" data-t="modal.ranking_sub">Player ranking by CP</div>
+      <div id="rankBody" style="margin-top:8px">
+        <div style="text-align:center;padding:20px;color:var(--textdim)" data-t="modal.loading">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FRIENDS MODAL ===== -->
+  <div class="modal-bg" id="friendsModal" data-mb="friendsModal">
+    <div class="modal" style="max-width:420px">
+      <button class="modal-x" data-close="friendsModal">✕</button>
+      <div class="modal-title" data-t="modal.friends_title">👥 Friends</div>
+      <div class="modal-subtitle" data-t="modal.friends_sub">Friends list & requests</div>
+      <div id="friendsTabs" style="display:flex;gap:4px;margin:8px 0">
+        <button class="tab on" data-act="friendstab" data-ft="list" data-t="friends.list">Friends</button>
+        <button class="tab" data-act="friendstab" data-ft="requests"><span data-t="friends.requests">Requests</span> <span id="friendReqBadge" style="display:none;background:var(--danger);color:#fff;font-size:8px;padding:1px 4px;border-radius:6px;margin-left:2px"></span></button>
+      </div>
+      <div id="friendsBody" style="margin-top:4px">
+        <div style="text-align:center;padding:20px;color:var(--textdim)" data-t="modal.loading">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== WAR STONE MODAL ===== -->
+  <div class="modal-bg" id="stoneModal" data-mb="stoneModal">
+    <div class="modal">
+      <button class="modal-close" data-close="stoneModal">&#10005;</button>
+      <div class="modal-title" id="stoneTitle" data-t="modal.stone_title">⚔️ Ancient Stone</div>
+      <div class="modal-subtitle" id="stoneSub" data-t="modal.stone_sub">Stone War</div>
+      <div id="stoneBody"></div>
+    </div>
+  </div>
+
+  <!-- EVENT FLOATING ICON (left-center) -->
+  <div class="evt-float-icon" id="evtPvpIcon" data-act="evtpvpinfo" style="display:none">
+    <svg viewBox="0 0 48 48" width="48" height="48">
+      <defs>
+        <radialGradient id="evtG1" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#ffd700"/><stop offset="100%" stop-color="#8b4513"/></radialGradient>
+        <filter id="evtGlow"><feGaussianBlur stdDeviation="2" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <circle cx="24" cy="24" r="22" fill="url(#evtG1)" stroke="#ffd700" stroke-width="1.5" filter="url(#evtGlow)"/>
+      <path d="M14,14 L22,24 L14,34 L18,34 L24,26 L30,34 L34,34 L26,24 L34,14 L30,14 L24,22 L18,14 Z" fill="#1a0a00" stroke="#ffd700" stroke-width=".5"/>
+      <path d="M12,36 L16,32 M36,36 L32,32" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="24" cy="8" r="2.5" fill="#ff4040" stroke="#ffd700" stroke-width=".5"/>
+    </svg>
+    <div class="evt-float-timer" id="evtPvpTimer">00:00</div>
+  </div>
+
+  <!-- EVENT INFO POPUP (before joining) -->
+  <div class="modal-bg" id="evtInfoModal" data-mb="evtInfoModal">
+    <div class="modal" style="max-width:380px">
+      <button class="modal-close" data-close="evtInfoModal">✕</button>
+      <div class="modal-title" id="evtInfoTitle" data-t="evt.tribal_war">⚔️ Tribal War</div>
+      <div class="modal-subtitle" id="evtInfoSub" data-t="evt.tribal_war_desc">Arena where tribes clash every hour</div>
+      <div id="evtInfoBody">
+        <div style="text-align:center;padding:12px 0">
+          <div style="font-size:32px;margin-bottom:8px">⚔️</div>
+          <div style="font-size:12px;color:var(--textlit);line-height:1.6;margin-bottom:12px">
+            <span data-t="evt.tribal_war_info">Attack other tribe warriors in tribal war!</span><br>
+            <span style="color:var(--gold)" data-t="evt.tribal_war_time">10 minutes</span> — <span data-t="evt.tribal_war_win">The tribe with the most kills wins.</span><br>
+            <span style="color:var(--goldlit)" data-t="evt.tribal_war_reward">Tribal War Chest</span> <span data-t="evt.tribal_war_reward2">is awarded!</span>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px">
+            <div style="background:rgba(122,192,216,.1);border:1px solid rgba(122,192,216,.3);border-radius:8px;padding:8px 12px;font-size:10px;color:#7ac0d8">❄️ <span data-t="evt.tribe_kar">Ice</span></div>
+            <div style="font-size:16px;color:var(--textdim);align-self:center">vs</div>
+            <div style="background:rgba(90,170,58,.1);border:1px solid rgba(90,170,58,.3);border-radius:8px;padding:8px 12px;font-size:10px;color:#5aaa3a">🌲 <span data-t="evt.tribe_orman">Forest</span></div>
+            <div style="font-size:16px;color:var(--textdim);align-self:center">vs</div>
+            <div style="background:rgba(216,160,64,.1);border:1px solid rgba(216,160,64,.3);border-radius:8px;padding:8px 12px;font-size:10px;color:#d8a040">🏜️ <span data-t="evt.tribe_col">Desert</span></div>
+          </div>
+          <div class="evt-countdown" id="evtInfoCountdown" style="font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--goldlit);font-weight:700;margin-bottom:12px">09:45</div>
+          <button class="btn full" data-act="evtpvpjoin" style="font-size:14px;padding:12px" data-t="evt.join_war">⚔️ JOIN WAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KAVIM SAVAŞI BATTLE MODAL -->
+  <div class="modal-bg" id="evtPvpModal" data-mb="evtPvpModal">
+    <div class="modal" style="position:relative">
+      <button class="modal-close" data-close="evtPvpModal">✕</button>
+      <div class="modal-title" data-t="evt.tribal_war">⚔️ Tribal War</div>
+      <div class="modal-subtitle" id="evtPvpSub"><span data-t="evt.time_remaining">Time remaining:</span> <span id="evtPvpCD">10:00</span></div>
+
+      <!-- Scoreboard -->
+      <div class="evt-scoreboard" id="evtScoreboard">
+        <div class="evt-score-tribe" data-tribe="kar">
+          <div class="evt-score-icon">❄️</div>
+          <div class="evt-score-name" data-t="evt.tribe_kar">Ice</div>
+          <div class="evt-score-kills" id="evtKillKar">0</div>
+        </div>
+        <div class="evt-score-tribe" data-tribe="orman">
+          <div class="evt-score-icon">🌲</div>
+          <div class="evt-score-name" data-t="evt.tribe_orman">Forest</div>
+          <div class="evt-score-kills" id="evtKillOrman">0</div>
+        </div>
+        <div class="evt-score-tribe" data-tribe="col">
+          <div class="evt-score-icon">🏜️</div>
+          <div class="evt-score-name" data-t="evt.tribe_col">Desert</div>
+          <div class="evt-score-kills" id="evtKillCol">0</div>
+        </div>
+      </div>
+
+      <!-- Player status -->
+      <div class="evt-player-status" id="evtPlayerStatus" style="display:none">
+        <div class="evt-fight-anim" id="evtFightAnim"></div>
+      </div>
+
+      <!-- Enemy lists -->
+      <div class="evt-enemies" id="evtEnemies">
+        <div class="g-section-h" style="font-size:10px;margin-bottom:6px" data-t="evt.enemy_warriors">Enemy Warriors</div>
+        <div class="evt-enemy-list" id="evtEnemyList"></div>
+      </div>
+
+      <!-- Combat log -->
+      <div class="evt-log" id="evtLog" style="max-height:100px;overflow-y:auto;margin-top:8px"></div>
+    </div>
+  </div>
+
+  <!-- Floating inventory button -->
+  <div class="inv-float-btn" id="invFloatBtn" data-act="bag"><svg viewBox="0 0 32 32" width="28" height="28"><defs><linearGradient id="bagG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b8864a"/><stop offset="100%" stop-color="#6a4420"/></linearGradient></defs><path d="M8,12 Q8,6 16,4 Q24,6 24,12" fill="none" stroke="#a07030" stroke-width="2" stroke-linecap="round"/><rect x="5" y="11" width="22" height="17" rx="3" fill="url(#bagG)" stroke="#d4a050" stroke-width=".8"/><rect x="7" y="11" width="18" height="3" rx="1" fill="#c89040"/><circle cx="16" cy="20" r="2.5" fill="#e8c060" stroke="#a08020" stroke-width=".5"/><rect x="14.5" y="19" width="3" height="4" rx=".8" fill="#c8a030" stroke="#a08020" stroke-width=".4"/></svg></div>
+
+  <!-- CHAT BUBBLE -->
+  <div class="chat-bubble" id="chatBar">
+    <div class="chat-collapsed" id="chatPreview" data-act="togglechat">
+      <div class="chat-preview-lines" id="chatPreviewLines"></div>
+    </div>
+    <div class="chat-expanded" id="chatPanel">
+      <div class="chat-top">
+        <span class="chat-channel-label" id="chatChLabel" data-t="chat.world_label">World</span>
+        <button class="chat-settings-btn" data-act="chatSettings">⚙️</button>
+      </div>
+      <div class="chat-settings-dropdown" id="chatSettingsDD" style="display:none">
+        <label class="chat-ch-toggle"><input type="checkbox" data-chk="kavim" checked> <span style="color:var(--safe)" data-t="chat.tribe_label">Tribe</span></label>
+        <label class="chat-ch-toggle"><input type="checkbox" data-chk="dunya" checked> <span style="color:var(--goldlit)" data-t="chat.world_label">World</span></label>
+        <label class="chat-ch-toggle"><input type="checkbox" data-chk="ozel" checked> <span style="color:#9a4ad8" data-t="chat.private_label">Private</span></label>
+        <label class="chat-ch-toggle"><input type="checkbox" data-chk="sistem" checked> <span style="color:#e04040" data-t="chat.system_label">System</span></label>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-row" id="chatInputRow">
+        <select class="chat-ch-select" id="chatChSelect">
+          <option value="dunya" data-t="chat.world_option">🌍 World</option>
+          <option value="kavim" data-t="chat.tribe_option">🏰 Tribe</option>
+          <option value="ozel" data-t="chat.private_option">💬 Private</option>
+        </select>
+        <input class="chat-input" id="chatInput" data-t="chat.placeholder" placeholder="Type a message..." maxlength="200">
+        <button class="chat-send" id="chatSend" data-act="chatsend">➤</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ÇANTA (BAG) MODAL ===== -->
+<div class="modal-bg" id="bagModal" data-mb="bagModal">
+  <div class="modal bag-modal">
+    <button class="modal-close" data-close="bagModal">✕</button>
+    <div class="modal-title" data-t="bag.title">📦 BAG</div>
+    <div class="modal-subtitle" data-t="bag.subtitle">Inventory · Equipment</div>
+    <div id="bagBody">
+      <div class="bag-equip-section">
+        <div class="sec-h" data-t="bag.equip_section">Equipment</div>
+        <div class="equip-grid" id="equipGrid"></div>
+      </div>
+      <div class="bag-stat-section">
+        <div class="bag-statcard" style="padding:8px 10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span style="font-family:Cinzel,serif;font-size:11px;font-weight:700;color:var(--textlit)" id="bagName">—</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--goldlit)" id="goldVal">0 💰</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:4px">
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between;font-size:8px;margin-bottom:2px"><span style="color:var(--textdim);font-family:Cinzel,serif;letter-spacing:1px;text-transform:uppercase" data-t="bag.weight">Weight</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px" id="wNum">0/100</span></div>
+              <div class="bar-track" style="height:5px"><div class="bar-fill" id="wFill" style="width:0"></div></div>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between;font-size:8px;margin-bottom:2px"><span style="color:var(--textdim);font-family:Cinzel,serif;letter-spacing:1px;text-transform:uppercase">Slot</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;color:#6aaaf0" id="sNum">0/20</span></div>
+              <div class="bar-track" style="height:5px"><div class="bar-fill" id="sFill" style="width:0;background:linear-gradient(90deg,#3a7ae0,#6aaaf0)"></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- STATLAR -->
+        <div id="bagStats" style="margin-top:6px"></div>
+      </div>
+      <div class="bag-inv-section" style="margin-top:12px">
+        <div class="bag-tabs" id="bagTabs">
+          <div class="tab on" data-cat="all" data-t="bag.tab_all">All</div>
+          <div class="tab" data-cat="equip" data-t="bag.tab_equip">Equipment</div>
+          <div class="tab" data-cat="raw" data-t="bag.tab_raw">Raw Material</div>
+          <div class="tab" data-cat="use" data-t="bag.tab_use">Consumable</div>
+          <div class="tab" data-cat="misc" data-t="bag.tab_misc">Other</div>
+        </div>
+        <div class="bag-tools"><div class="tbtn" data-act="sortbag" data-t="bag.sort">⇅ Sort</div></div>
+        <div class="grid" id="bagGrid"></div>
+        <div class="bag-grid-foot"><span id="footCount">0 items</span><span class="hint" data-t="bag.touch_hint">Tap · opens window</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BANKA MODAL ===== -->
+<div class="modal-bg" id="bankaModal" data-mb="bankaModal">
+  <div class="modal banka-modal">
+    <button class="modal-close" data-close="bankaModal">✕</button>
+    <div class="modal-title" data-t="bank.title">🏦 BANK</div>
+    <div class="modal-subtitle" data-t="bank.subtitle">Secure Storage</div>
+    <div id="bankaBody">
+      <div class="bk-city-tabs" id="bankCityTabs"></div>
+      <div class="bk-col bk-inv">
+        <div class="bk-sec-top">
+          <div class="sec-h" data-t="bank.inv_label">📦 Inventory</div>
+          <div class="bk-bar-mini"><span class="lbl" id="bkInvNum">0/20</span><div class="bar-track"><div class="bar-fill" id="bkInvFill"></div></div></div>
+        </div>
+        <div class="grid" id="bkInvGrid"></div>
+        <div class="bk-acts">
+          <button class="btn sm" id="bkToBank" data-act="bankxfer" data-dir="toBank" disabled data-t="bank.to_bank">→ To Bank</button>
+          <button class="btn sm ghost" data-act="banksort" data-side="inv" data-t="bank.sort">⇅ Sort</button>
+        </div>
+        <div class="bk-foot" id="bkInvFoot"></div>
+      </div>
+      <div class="bk-col bk-bnk">
+        <div class="bk-sec-top">
+          <div class="sec-h"><span data-t="bank.label">🏛️ Bank</span> <span class="badge" style="background:rgba(90,170,58,.15);color:#5aaa3a;border:1px solid #5aaa3a" data-t="bank.safe_badge">SAFE</span></div>
+          <div class="bk-bar-mini"><span class="lbl" id="bkBnkNum">0/100</span><div class="bar-track"><div class="bar-fill" id="bkBnkFill"></div></div></div>
+        </div>
+        <div class="grid" id="bkBnkGrid"></div>
+        <div class="bk-acts">
+          <button class="btn sm" id="bkToInv" data-act="bankxfer" data-dir="toInv" disabled data-t="bank.to_inv">← To Inventory</button>
+          <button class="btn sm ghost" data-act="banksort" data-side="bnk" data-t="bank.sort">⇅ Sort</button>
+        </div>
+        <div class="bk-foot" id="bkBnkFoot"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAZARYERI (TRADING HOUSE) MODAL ===== -->
+<div class="modal-bg" id="pazarModal" data-mb="pazarModal">
+  <div class="modal pazar-modal">
+    <button class="modal-close" data-close="pazarModal">✕</button>
+    <div class="modal-title" data-t="market.title">🏪 MARKETPLACE</div>
+    <div class="modal-subtitle" data-t="market.subtitle">Trading House</div>
+    <div id="pazarBody"></div>
+  </div>
+</div>
+
+<!-- ===== PAZAR SATIN AL (BUY) MODAL ===== -->
+<div class="modal-bg" id="pazarBuyModal" data-mb="pazarBuyModal">
+  <div class="modal">
+    <button class="modal-close" data-close="pazarBuyModal">✕</button>
+    <div id="pazarBuyBody"></div>
+  </div>
+</div>
+
+<!-- ===== BANKA TRANSFER MODAL ===== -->
+<div class="modal-bg" id="bankXfer" data-mb="bankXfer">
+  <div class="modal">
+    <div class="xf-head">
+      <div class="xf-slot" id="xfSlot"></div>
+      <div><div class="xf-name" id="xfName"></div><div class="xf-sub" id="xfSub"></div></div>
+    </div>
+    <div class="xf-dir" id="xfDir"></div>
+    <div class="xf-qrow">
+      <label data-t="xfer.quantity">How many to transfer?</label>
+      <div class="xf-qin">
+        <input type="range" id="xfRange" min="1" max="99" value="1">
+        <input type="number" id="xfNum" min="1" max="99" value="1">
+      </div>
+    </div>
+    <div class="xf-quick" id="xfQuick"></div>
+    <div class="xf-acts">
+      <button class="sec" data-close="bankXfer" data-t="xfer.cancel">Cancel</button>
+      <button class="pri" data-act="bankxferok" data-t="xfer.confirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GATHERING MODAL ===== -->
+<div class="modal-bg" id="gatherModal" data-mb="gatherModal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" data-close="gatherModal">✕</button>
+    <button class="g-gather-btn g-gather-topleft" id="gAction" data-act="togglegather"><span class="g-gather-ico">⛏</span><span class="g-gather-txt" data-t="gather.gather_btn">GATHER</span></button>
+    <div class="modal-title" data-t="gather.title">⛏ Gathering</div>
+    <div class="modal-subtitle" data-t="gather.subtitle">Node resource details</div>
+    <div class="g-itemcard">
+      <div class="g-itemcard-vis" id="mVis"><div class="icon-big" id="mIcon">💎</div><div class="tier-badge" id="mTier">I</div></div>
+      <div class="g-itemcard-details">
+        <div class="g-detail-row"><span class="label">Tier</span><span class="val" id="mTierTxt">1</span></div>
+        <div class="g-detail-row"><span class="label" data-t="gather.material">Material</span><span class="val" id="mMat">—</span></div>
+        <div class="g-detail-row"><span class="label" data-t="gather.color">Color</span><span class="val" id="mRar">—</span></div>
+        <div class="g-detail-row"><span class="label" data-t="gather.zone">Zone</span><span class="val" id="mZone">—</span></div>
+      </div>
+      <div class="g-count" id="mCount">99 / 99</div>
+    </div>
+    <div class="g-section">
+      <div class="g-section-h" data-t="gather.active_bonus">Active Bonuses</div>
+      <div class="g-bonus-grid">
+        <div class="g-bonus"><div class="g-bonus-label" data-t="gather.speed">Speed (item/min)</div><div class="g-bonus-val" id="mSpeed">10</div></div>
+        <div class="g-bonus"><div class="g-bonus-label">Yield</div><div class="g-bonus-val" id="mYield">1.00×</div></div>
+        <div class="g-bonus"><div class="g-bonus-label" data-t="gather.double_chance">2× Chance</div><div class="g-bonus-val" id="mDouble">0%</div></div>
+      </div>
+    </div>
+    <div class="dg-players" id="gPlayers" style="padding:6px 0;justify-content:flex-start"></div>
+    <div class="g-section" style="margin-top:0">
+      <div class="g-inv-header" style="margin-bottom:6px">
+        <span class="dg-inv-title" data-t="gather.inv_title">Inventory</span>
+        <div class="dg-inv-tabs">
+          <div class="dg-inv-tab active" data-gcat="all" data-t="gather.tab_all">All</div>
+          <div class="dg-inv-tab" data-gcat="raw" data-t="gather.tab_raw">Materials</div>
+          <div class="dg-inv-tab" data-gcat="equip" data-t="gather.tab_equip">Equipment</div>
+          <div class="dg-inv-tab" data-gcat="misc" data-t="gather.tab_misc">Other</div>
+        </div>
+        <span class="dg-inv-count" id="gInvCount">0</span>
+      </div>
+      <div class="grid dg-inv-grid" id="gInvGrid"></div>
+    </div>
+    <div class="g-progress-wrap" id="gProgressWrap" style="display:none">
+      <div class="g-progress-label"><span data-t="gather.progress">Gathering...</span><span class="pct" id="gPct">0%</span></div>
+      <div class="g-progress"><div class="g-progress-fill" id="gFill" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DUNGEON MODAL ===== -->
+<div class="modal-bg" id="dungeonModal" data-mb="dungeonModal">
+  <div class="modal">
+    <button class="modal-close" data-close="dungeonModal">✕</button>
+    <div class="modal-title" data-t="dg.title">🏰 Dungeon</div>
+    <div class="modal-subtitle" id="dgSubtitle" data-t="dg.floor_select">Floor selection</div>
+    <div id="dgContent">
+      <div id="dungeonSelect">
+        <div class="dg-floor-list" id="dgFloorList"></div>
+      </div>
+      <div id="dungeonActive" style="display:none">
+        <div class="dg-active-top">
+          <div class="dg-active-info">
+            <span class="dg-active-floor" id="dgActiveTitle">K1</span>
+            <span class="dg-active-stats"><span id="dgKillCount">0 kill</span> · <span id="dgGoldCounter">💰 0</span></span>
+          </div>
+          <div class="dg-active-controls">
+            <button class="dg-ctrl-btn auto sm" data-act="dgauto" id="dgAutoBtn">Auto</button>
+            <button class="dg-ctrl-btn exit sm" data-act="dgexit" data-t="dg.exit">Exit</button>
+          </div>
+        </div>
+        <div class="dg-boss-queue" id="dgBossQueue"></div>
+        <div class="dg-mob-area" id="dgMobArea">
+          <div class="dg-mob-sprite" id="dgMobSprite"></div>
+          <div class="dg-mob-name" id="dgMobName">---</div>
+          <div class="dg-mob-cp" id="dgMobCP">0 CP</div>
+        </div>
+        <div class="dg-fight-bar" style="margin:4px auto"><div class="dg-fight-fill" id="dgFightFill"></div></div>
+        <div class="dg-mob-status" id="dgMobStatus" style="text-align:center;font-size:10px;color:var(--textdim);margin-bottom:6px" data-t="dg.fighting">Fighting...</div>
+        <div class="dg-players" id="dgPlayers"></div>
+        <div class="g-section" style="margin-top:6px">
+          <div class="g-inv-header" style="margin-bottom:6px">
+            <span class="dg-inv-title" data-t="dg.inv_title">Inventory</span>
+            <div class="dg-inv-tabs">
+              <div class="dg-inv-tab active" data-dcat="all" data-t="dg.tab_all">All</div>
+              <div class="dg-inv-tab" data-dcat="equip" data-t="dg.tab_equip">Equipment</div>
+              <div class="dg-inv-tab" data-dcat="raw" data-t="dg.tab_raw">Materials</div>
+              <div class="dg-inv-tab" data-dcat="misc" data-t="dg.tab_misc">Other</div>
+            </div>
+            <span class="dg-inv-count" id="dgInvCount">0</span>
+          </div>
+          <div class="grid dg-inv-grid" id="dgInvGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DUNGEON SUMMARY MODAL ===== -->
+<div class="modal-bg" id="dungeonSumModal" data-mb="dungeonSumModal">
+  <div class="modal">
+    <div class="modal-title" style="color:#e8c0ff" data-t="dg.summary_title">🏰 Dungeon Summary</div>
+    <div class="modal-subtitle" data-t="dg.summary_sub">Battle Report</div>
+    <div id="dungeonSumBody"></div>
+    <button class="btn full" data-close="dungeonSumModal" style="margin-top:12px" data-t="dg.ok">OK</button>
+  </div>
+</div>
+
+<!-- ===== TRAVEL MODAL ===== -->
+<div class="modal-bg" id="travelModal" data-mb="travelModal">
+  <div class="modal tr-modal">
+    <button class="modal-close" data-close="travelModal">✕</button>
+    <div class="modal-title" id="trTitle" data-t="travel.region">Region</div>
+    <div class="modal-subtitle" id="trSub" data-t="travel.option">Travel option</div>
+    <div class="tr-preview" id="trPreview"><div class="tr-name" id="trName">—</div></div>
+    <div class="tr-info" id="trInfo"></div>
+    <button class="tr-action" id="trAction" data-act="dotravel" data-t="travel.go">▶ Travel</button>
+  </div>
+</div>
+
+<!-- ===== GENERIC SHEET MODAL (çanta/atölye/banka/pazar/item) ===== -->
+<div class="modal-bg" id="sheetModal" data-mb="sheetModal">
+  <div class="modal">
+    <button class="modal-close" data-close="sheetModal">✕</button>
+    <div class="modal-title" id="sheetTitle">—</div>
+    <div class="modal-subtitle" id="sheetSub"></div>
+    <div id="sheetBody"></div>
+  </div>
+</div>
+
+<!-- ===== MOUNT (BINEK) MODAL ===== -->
+<div class="modal-bg" id="mountModal" data-mb="mountModal">
+  <div class="modal">
+    <button class="modal-close" data-close="mountModal">&#10005;</button>
+    <div class="modal-title" data-t="mount.title">🐴 MOUNT</div>
+    <div class="modal-subtitle" data-t="mount.subtitle">Mount System</div>
+    <div id="mountBody"></div>
+  </div>
+</div>
+
+<!-- ===== PREMIUM SHOP (MAGAZA) MODAL ===== -->
+<div class="modal-bg" id="shopModal" data-mb="shopModal">
+  <div class="modal">
+    <button class="modal-close" data-close="shopModal">&#10005;</button>
+    <div class="modal-title">&#x1F48E; MAGAZA</div>
+    <div class="modal-subtitle">Premium &amp; Kristal</div>
+    <div id="shopBody"></div>
+  </div>
+</div>
+
+<!-- ===== WAR (KADIM TAS SAVASI) MODAL ===== -->
+<div class="modal-bg" id="warModal" data-mb="warModal">
+  <div class="modal">
+    <button class="modal-close" data-close="warModal">&#10005;</button>
+    <div class="modal-title">&#x2694;&#xFE0F; KADIM TAS SAVASI</div>
+    <div class="modal-subtitle">Savas Haritasi</div>
+    <div id="warBody"></div>
+  </div>
+</div>
+
+<!-- ===== MAILBOX (POSTA) MODAL ===== -->
+<div class="modal-bg" id="mailboxModal" data-mb="mailboxModal">
+  <div class="modal">
+    <button class="modal-close" data-close="mailboxModal">&#10005;</button>
+    <div class="modal-title">&#x1F4E9; POSTA</div>
+    <div class="modal-subtitle">Bildirimler &amp; Sat&#x131;&#x15F; Gelirleri</div>
+    <div id="mailboxBody"></div>
+  </div>
+</div>
+
+<!-- ===== TRADE (TICARET) MODAL ===== -->
+<div class="modal-bg" id="tradeModal" data-mb="tradeModal">
+  <div class="modal">
+    <button class="modal-close" data-close="tradeModal">&#10005;</button>
+    <div class="modal-title">&#x1F91D; TICARET</div>
+    <div class="modal-subtitle">NPC Takas Sistemi</div>
+    <div id="tradeBody"></div>
+  </div>
+</div>
+
+<!-- item popover (item üstünde açılan küçük pencere) -->
+<div class="itempop" id="itemPop"></div>
+
+<!-- buff popover -->
+<div class="buff-pop" id="buffPop"></div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script src="js/lang.js?v=7860"></script>
+<script src="js/firebase-init.js?v=7860"></script>
+
+<script src="js/art.js?v=7860"></script>
+<script src="js/icons.js?v=7860"></script>
+<script src="js/eqicons.js?v=7860"></script>
+<script src="js/mobsvg.js?v=7860"></script>
+<script src="js/biomemobs.js?v=7860"></script>
+<script src="js/mounts.js?v=7860"></script>
+<script src="js/stones.js?v=7860"></script>
+<script src="js/enhstones.js?v=7860"></script>
+<script src="js/zoneimg.js?v=7860"></script>
+<script src="js/data.js?v=7860"></script>
+<script src="js/engine.js?v=7860"></script>
+<script src="js/state.js?v=7860"></script>
+<script src="js/world.js?v=7860"></script>
+<script src="js/dungeon.js?v=7860"></script>
+<script src="js/craft.js?v=7860"></script>
+<script src="js/chat.js?v=7860"></script>
+<script src="js/ui.js?v=7860"></script>
+<script src="js/events.js?v=7860"></script>
+<script src="js/game.js?v=7860"></script>
+</body>
+</html>
