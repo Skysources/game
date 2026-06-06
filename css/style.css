@@ -959,15 +959,29 @@ input.nm:focus{outline:none; border-color:var(--gold);}
 /* ===== COMPACT NAV ICONS (top bar) ===== */
 .sb-right{display:flex; flex-direction:column; gap:5px; align-items:flex-end;}
 .nav-icons{display:flex; gap:6px; align-items:center; margin-left:8px;}
-.nav-ico{width:32px; height:32px; background:rgba(26,22,18,.7); border:1px solid rgba(200,160,48,.25); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; backdrop-filter:blur(6px); color:var(--goldlit); transition:all .15s; padding:0; outline:none;}
-.nav-ico:hover,.nav-ico:active{background:rgba(58,40,24,.7); border-color:var(--goldlit);}
-.nav-ico.menu-btn{width:42px; height:32px; font-size:18px; border-radius:8px; letter-spacing:1px;}
+/* HUD buton — altın çerçeveli Arkana stili */
+.nav-ico{position:relative; width:34px; height:34px; display:grid; place-items:center; cursor:pointer; border:0; padding:0; outline:none;
+  border-radius:12px; color:var(--goldlit);
+  background:radial-gradient(125% 120% at 34% 22%, #2c2519 0%, #19130c 60%, #0e0a06 100%);
+  box-shadow:inset 0 1.5px 0 rgba(255,224,158,.22), inset 0 -6px 10px rgba(0,0,0,.5), inset 0 0 0 1.5px #b8902e, 0 0 0 1px #000, 0 0 12px -3px rgba(230,192,104,.3), 0 5px 12px rgba(0,0,0,.5);
+  transition:transform .12s ease, box-shadow .15s ease, filter .15s ease; font-size:16px;}
+.nav-ico::after{content:"";position:absolute;inset:3px;border-radius:9px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(230,192,104,.14);}
+.nav-ico:hover{filter:brightness(1.08);}
+.nav-ico:active{transform:scale(.94); box-shadow:inset 0 2px 8px rgba(0,0,0,.7), inset 0 0 0 1.5px #b8902e, 0 0 0 1px #000, 0 0 14px -2px rgba(230,192,104,.45);}
+.nav-ico.menu-btn{width:40px; height:34px; border-radius:12px; font-size:18px; letter-spacing:1px;}
 
-/* Floating inventory button (bottom-right) */
-.inv-float-btn{position:absolute; bottom:70px; right:12px; z-index:29; width:52px; height:52px; background:rgba(14,11,8,.75); border:1.5px solid rgba(200,160,48,.35); border-radius:50%; cursor:pointer; backdrop-filter:blur(8px); display:none; align-items:center; justify-content:center; transition:all .15s; pointer-events:auto;}
-.phone.ingame .inv-float-btn{display:flex;}
-.inv-float-btn:hover{background:rgba(58,40,24,.7); border-color:var(--goldlit); transform:scale(1.08);}
-.inv-float-btn:active{transform:scale(.94);}
+/* Floating inventory button (bottom-right) — Arkana stili */
+.inv-float-btn{position:absolute; bottom:70px; right:12px; z-index:29; width:50px; height:50px; display:none; place-items:center; cursor:pointer; pointer-events:auto;
+  border-radius:16px; border:0;
+  background:radial-gradient(125% 120% at 34% 22%, #2c2519 0%, #19130c 60%, #0e0a06 100%);
+  box-shadow:inset 0 1.5px 0 rgba(255,224,158,.22), inset 0 -8px 14px rgba(0,0,0,.5), inset 0 0 0 1.5px #b8902e, 0 0 0 1px #000, 0 0 16px -3px rgba(230,192,104,.35), 0 8px 18px rgba(0,0,0,.55);
+  transition:transform .12s ease, box-shadow .15s ease, filter .15s ease;}
+.inv-float-btn::after{content:"";position:absolute;inset:4px;border-radius:12px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(230,192,104,.16);}
+.inv-float-btn svg{filter:drop-shadow(0 2px 3px rgba(0,0,0,.55));}
+.phone.ingame .inv-float-btn{display:grid;}
+.inv-float-btn:hover{filter:brightness(1.08);}
+.inv-float-btn:active{transform:scale(.94); box-shadow:inset 0 2px 8px rgba(0,0,0,.7), inset 0 0 0 1.5px #b8902e, 0 0 0 1px #000, 0 0 18px -2px rgba(230,192,104,.5);}
+@keyframes fabpulse{0%,100%{box-shadow:inset 0 1.5px 0 rgba(255,224,158,.22), inset 0 -8px 14px rgba(0,0,0,.5), inset 0 0 0 1.5px #b8902e, 0 0 0 1px #000, 0 0 16px -3px rgba(230,192,104,.35), 0 8px 18px rgba(0,0,0,.55), 0 0 0 0 rgba(230,192,104,0);}50%{box-shadow:inset 0 1.5px 0 rgba(255,224,158,.22), inset 0 -8px 14px rgba(0,0,0,.5), inset 0 0 0 1.5px #b8902e, 0 0 0 1px #000, 0 0 16px -3px rgba(230,192,104,.35), 0 8px 18px rgba(0,0,0,.55), 0 0 0 6px rgba(230,192,104,.1);}}
 
 /* ===== CHAT BUBBLE ===== */
 .chat-bubble{position:absolute; bottom:10px; left:50%; transform:translateX(-50%); z-index:30; display:none; flex-direction:column; width:92%; max-width:400px; pointer-events:auto; transition:all .3s ease;}
@@ -1029,9 +1043,9 @@ input.nm:focus{outline:none; border-color:var(--gold);}
   .zone-status{font-size:10px; padding:3px 10px;}
   .stat-chip{font-size:13px; padding:4px 14px 4px 10px;}
   .nav-icons{gap:8px;}
-  .nav-ico{width:38px; height:38px; font-size:18px; border-radius:10px;}
-  .inv-float-btn{width:56px; height:56px; bottom:74px; right:16px;}
-  .nav-ico.menu-btn{width:48px; height:36px; font-size:20px;}
+  .nav-ico{width:38px; height:38px; font-size:18px; border-radius:13px;}
+  .inv-float-btn{width:54px; height:54px; bottom:74px; right:16px; border-radius:17px;}
+  .nav-ico.menu-btn{width:44px; height:38px; font-size:20px; border-radius:13px;}
   .buff-squares{max-width:300px; gap:6px;}
   .buff-sq{width:30px; height:30px; font-size:16px; border-radius:6px;}
 
@@ -1204,7 +1218,7 @@ input.nm:focus{outline:none; border-color:var(--gold);}
   .zone-status{font-size:8px; padding:2px 6px;}
   .stat-chip{font-size:10px; padding:2px 8px 2px 6px;}
   .nav-icons{gap:4px;}
-  .nav-ico{width:28px; height:28px; font-size:14px; border-radius:6px;}
+  .nav-ico{width:30px; height:30px; font-size:14px; border-radius:10px;}
   .sb-right{gap:3px;}
   .buff-squares{max-width:120px; gap:3px;}
   .buff-sq{width:20px; height:20px; font-size:11px;}
