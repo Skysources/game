@@ -167,21 +167,44 @@ SKY.UI = (function () {
     else canvas.appendChild(el);
   }
 
+  // ---- City SVG Icons ----
+  var CITY_ICONS = {
+    belediye:'<svg viewBox="0 0 48 48"><g fill="currentColor"><path d="M24 6 L41 16 H7 Z"/><rect x="10" y="18" width="4" height="17"/><rect x="18" y="18" width="4" height="17"/><rect x="26" y="18" width="4" height="17"/><rect x="34" y="18" width="4" height="17"/><rect x="6" y="36" width="36" height="5" rx="1.5"/></g></svg>',
+    atolye:'<svg viewBox="0 0 48 48"><g fill="currentColor"><rect x="11" y="18" width="22" height="5" rx="2.5"/><path d="M9 23 H35 C35 28 30 30 26 30 L28 40 H17 L19 30 C14 30 9 28 9 23 Z"/><path d="M30 10 L40 14 L38 20 L29 16 Z"/></g></svg>',
+    banka:'<svg viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3"><circle cx="24" cy="24" r="13"/><circle cx="24" cy="24" r="3.4" fill="currentColor"/><line x1="24" y1="8" x2="24" y2="13"/><line x1="24" y1="35" x2="24" y2="40"/><line x1="8" y1="24" x2="13" y2="24"/><line x1="35" y1="24" x2="40" y2="24"/></g></svg>',
+    pazar:'<svg viewBox="0 0 48 48"><g fill="currentColor"><path d="M9 9 H39 L43 20 H5 Z"/><path d="M5 20 q3.4 5 6.8 0 q3.4 5 6.8 0 q3.4 5 6.8 0 q3.4 5 6.8 0 q3.4 5 6.8 0 V20 Z" opacity=".55"/><rect x="10" y="22" width="4" height="18"/><rect x="34" y="22" width="4" height="18"/><rect x="10" y="30" width="28" height="4"/></g></svg>',
+    kasa:'<svg viewBox="0 0 48 48"><g fill="currentColor"><path d="M7 19 Q7 13 24 13 Q41 13 41 19 V23 H7 Z"/><rect x="7" y="23" width="34" height="16" rx="2"/><rect x="20.5" y="25" width="7" height="9" rx="1.5" fill="#0e0a06"/><circle cx="24" cy="28.5" r="1.6" fill="currentColor"/></g></svg>',
+    kapi:'<svg viewBox="0 0 48 48"><g fill="currentColor"><rect x="6" y="15" width="9" height="26"/><rect x="33" y="15" width="9" height="26"/><path d="M6 12h3v3h3v-3h3v6H6z M33 12h3v3h3v-3h3v6h-9z"/><path d="M15 41 V27 Q24 19 33 27 V41 Z"/><path d="M15 41 V29 Q24 23 33 29 V41 Z" fill="#0e0a06"/></g></svg>'
+  };
+  var CITY_GEM = '<svg viewBox="0 0 54 64" class="cgem"><polygon points="27,2 50,17 50,47 27,62 4,47 4,17" fill="#1a1408" stroke="#ffce5e" stroke-width="2"/><polygon points="27,8 44,20 44,44 27,56 10,44 10,20" fill="url(#cgg)"/><polygon points="27,8 44,20 27,32 10,20" fill="#ffe9a8" opacity=".5"/><defs><linearGradient id="cgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd86a"/><stop offset="1" stop-color="#a06f12"/></linearGradient></defs></svg>';
+  var CITY_SKYLINES = {
+    kar:'<svg viewBox="0 0 100 40" preserveAspectRatio="none"><polygon points="0,40 0,22 12,8 22,20 32,6 44,22 56,4 70,22 82,12 100,26 100,40" fill="#22384a" opacity=".8"/><polygon points="0,40 14,18 26,28 40,14 54,28 66,16 80,30 100,20 100,40" fill="#16283a"/><polygon points="32,6 35,9 29,9" fill="#dfeaf2"/><polygon points="56,4 59,8 53,8" fill="#dfeaf2"/></svg>',
+    orman:'<svg viewBox="0 0 100 40" preserveAspectRatio="none"><polygon points="0,40 0,26 8,10 16,26 24,12 33,26 42,9 52,26 61,13 71,26 80,11 90,26 100,16 100,40" fill="#13301d" opacity=".85"/><polygon points="0,40 7,20 15,30 24,18 34,30 45,20 56,30 67,19 78,30 90,21 100,30 100,40" fill="#0c2113"/></svg>',
+    col:'<svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0,40 L0,30 Q18,18 38,28 Q56,36 74,24 Q88,16 100,26 L100,40 Z" fill="#7a4a1d" opacity=".75"/><path d="M0,40 L0,34 Q22,26 44,33 Q66,39 86,30 Q94,27 100,32 L100,40 Z" fill="#592f12"/></svg>'
+  };
+  var CITY_PARTICLES = {
+    kar:{color:'#ffffff',count:26,size:[2,4],dur:[6,12]},
+    orman:{color:'#9fd86a',count:16,size:[3,6],dur:[7,13]},
+    col:{color:'#e8c486',count:18,size:[2,4],dur:[5,10]}
+  };
+
   function renderCityStone(scene, city) {
     const stoneInfo = ZONE_STONES['city_' + city];
     if (!stoneInfo) return;
-    const svgContent = STONE_SVG_MAP[stoneInfo.svg] || '🪨';
     const sid = zoneToStoneId('city_' + city);
     const wst = window.SKY_WAR_STATE;
     const wsStone = wst ? wst.stones.find(function(s) { return s.id === sid; }) : null;
     const hp = wsStone ? wsStone.hp : D.WAR.stoneHP;
+    const maxHp = D.WAR.stoneHP;
+    const hpPct = Math.round((hp / maxHp) * 100);
     const owner = wsStone ? wsStone.owner : city;
     const ownerIcon = D.CITIES[owner] ? D.CITIES[owner].icon : '🏰';
 
-    scene.innerHTML += `<div class="kadim-stone city-stone" style="left:50%;top:46%;z-index:10" data-act="openstone" data-sid="${sid || ''}">
-      ${svgContent}
-      <div class="ks-label">${stoneInfo.name}</div>
-      <div class="ks-hp" style="color:var(--goldlit)">${ownerIcon} ${fmt(hp)}</div>
+    scene.innerHTML += `<div class="ckadim" data-act="openstone" data-sid="${sid || ''}">
+      <div class="cmon"><div class="caura"></div><div class="crunering"></div><div class="crunering cr2"></div>${CITY_GEM}</div>
+      <div class="ckname">${stoneInfo.name}</div>
+      <div class="ckhpbar"><i style="width:${hpPct}%"></i></div>
+      <div class="ckhp">${ownerIcon} ${fmt(hp)} / ${fmt(maxHp)}</div>
     </div>`;
   }
 
@@ -232,24 +255,20 @@ SKY.UI = (function () {
   }
   function refreshIfMap() { if (activeScreen === 'map') renderMap(); }
 
-  // ---- Şehir İçi Sahnesi (skyzone-sehir.html) ----
-  const CITY_DECOS = {
-    kar: [{e:'🏔️',x:8,y:8,s:48},{e:'🏔️',x:78,y:6,s:42},{e:'⛰️',x:45,y:5,s:35},{e:'🌲',x:5,y:35,s:30},{e:'🌲',x:92,y:30,s:28},{e:'🌲',x:88,y:55,s:24},{e:'❄️',x:22,y:12,s:16},{e:'❄️',x:68,y:10,s:14},{e:'🌲',x:8,y:70,s:26},{e:'🌲',x:90,y:75,s:22}],
-    orman: [{e:'🌳',x:5,y:10,s:44},{e:'🌳',x:88,y:8,s:40},{e:'🌳',x:50,y:4,s:32},{e:'🌿',x:15,y:28,s:20},{e:'🌿',x:85,y:32,s:18},{e:'🌳',x:3,y:55,s:34},{e:'🌳',x:95,y:58,s:30},{e:'🍃',x:40,y:12,s:14},{e:'🌿',x:10,y:78,s:18},{e:'🌳',x:92,y:78,s:26}],
-    col: [{e:'☀️',x:50,y:4,s:36},{e:'🏜️',x:8,y:12,s:38},{e:'🌵',x:88,y:10,s:30},{e:'🌵',x:10,y:40,s:24},{e:'🪨',x:90,y:38,s:20},{e:'🌵',x:5,y:65,s:22},{e:'🏜️',x:92,y:62,s:28},{e:'🪨',x:20,y:15,s:16},{e:'🌵',x:8,y:80,s:20},{e:'🪨',x:88,y:80,s:16}],
-  };
+  // ---- Şehir İçi Sahnesi (hex medallion design) ----
   function cityBldLabel(id) {
     var map = { belediye: 'bld.townhall', atolye: 'bld.workshop', banka: 'bld.bank', pazar: 'bld.market', kasa: 'bld.treasury', kapi: 'bld.gate' };
     return t(map[id] || id);
   }
   const CITY_BLDS = [
-    {id:'belediye',icon:'🏛️',get label(){return cityBldLabel('belediye');},cls:'belediye',x:50,y:24},
-    {id:'atolye',icon:'⚒️',get label(){return cityBldLabel('atolye');},cls:'atolye',x:22,y:40},
-    {id:'banka',icon:'🏦',get label(){return cityBldLabel('banka');},cls:'banka',x:78,y:40},
-    {id:'pazar',icon:'🏪',get label(){return cityBldLabel('pazar');},cls:'pazar',x:30,y:58},
-    {id:'kasa',icon:'💰',get label(){return cityBldLabel('kasa');},cls:'kasa',x:70,y:58},
-    {id:'kapi',icon:'🚪',get label(){return cityBldLabel('kapi');},cls:'kapi',x:50,y:76},
+    {id:'belediye',get label(){return cityBldLabel('belediye');},x:50,y:23,acc:'rgba(180,170,150,.5)',glow:'rgba(180,170,150,.16)'},
+    {id:'atolye',get label(){return cityBldLabel('atolye');},x:21,y:39,acc:'rgba(230,140,50,.5)',glow:'rgba(230,140,50,.16)'},
+    {id:'banka',get label(){return cityBldLabel('banka');},x:79,y:39,acc:'rgba(80,170,90,.5)',glow:'rgba(80,170,90,.16)'},
+    {id:'pazar',get label(){return cityBldLabel('pazar');},x:21,y:67,acc:'rgba(190,130,60,.5)',glow:'rgba(190,130,60,.16)'},
+    {id:'kasa',get label(){return cityBldLabel('kasa');},x:79,y:67,acc:'rgba(255,206,94,.6)',glow:'rgba(255,206,94,.2)',lit:true},
+    {id:'kapi',get label(){return cityBldLabel('kapi');},x:50,y:83,acc:'rgba(110,150,200,.5)',glow:'rgba(110,150,200,.16)'},
   ];
+  var CITY_CENTER = {x:50, y:52};
   const BLD_INFO = {
     belediye:{get title(){return t('bld.townhall_title');},get sub(){return t('bld.townhall_sub');},icon:'🏛️',get desc(){return t('bld.townhall_desc');}},
     kasa:{get title(){return t('bld.treasury_title');},get sub(){return t('bld.treasury_sub');},icon:'💰',get desc(){return t('bld.treasury_desc');}},
@@ -272,32 +291,47 @@ SKY.UI = (function () {
   function renderCityScene(z) {
     const city = z.city;
     const vp = $('#mapViewport');
-    // eski sahneyi temizle
     vp.querySelectorAll('.city-scene').forEach(el => el.remove());
     const scene = document.createElement('div');
     scene.className = 'city-scene';
-    scene.innerHTML = `<div class="city-scene-bg ${city}"></div>`;
-    // dekorasyon
-    const decos = CITY_DECOS[city] || [];
-    for (const d of decos) {
-      scene.innerHTML += `<div class="cdeco" style="left:${d.x}%;top:${d.y}%;font-size:${d.s}px">${d.e}</div>`;
-    }
-    // taş yollar (belediyeden diğer binalara)
-    const ctr = CITY_BLDS[0];
-    for (const b of CITY_BLDS.slice(1)) {
-      for (let i = 1; i < 7; i++) {
-        const t = i / 7;
-        scene.innerHTML += `<div class="cpath-dot" style="left:${ctr.x + (b.x - ctr.x) * t}%;top:${ctr.y + (b.y - ctr.y) * t}%"></div>`;
+    var h = '';
+    // sky layers
+    h += '<div class="csky ' + city + '"></div>';
+    h += '<div class="cglowtop ' + city + '"></div>';
+    h += '<div class="cskyline">' + (CITY_SKYLINES[city] || '') + '</div>';
+    h += '<div class="cfog ' + city + '"></div>';
+    // particles
+    var P = CITY_PARTICLES[city];
+    if (P) {
+      var pts = '';
+      for (var pi = 0; pi < P.count; pi++) {
+        var ps = P.size[0] + Math.random() * (P.size[1] - P.size[0]);
+        var pd = P.dur[0] + Math.random() * (P.dur[1] - P.dur[0]);
+        pts += '<div class="cpt" style="left:' + (Math.random()*100) + '%;top:' + (-10+Math.random()*80) + '%;width:' + ps + 'px;height:' + ps + 'px;background:' + P.color + ';animation-duration:' + pd + 's;animation-delay:' + (-Math.random()*8) + 's"></div>';
       }
+      h += '<div class="cparticles">' + pts + '</div>';
     }
-    // binalar
-    for (const b of CITY_BLDS) {
-      scene.innerHTML += `<div class="cbld" style="left:${b.x}%;top:${b.y}%" data-act="citybld" data-bld="${b.id}">
-        <div class="cbld-icon ${b.cls}">${b.icon}</div>
-        <div class="cbld-label">${b.label}</div>
-      </div>`;
+    // plaza
+    h += '<div class="cplaza"><div class="cdisc"></div><div class="cring cr1"></div><div class="cring cr2"></div><div class="cring cr3"></div></div>';
+    // paths (SVG dashed lines from center to buildings)
+    var pathLines = '';
+    for (var bi = 0; bi < CITY_BLDS.length; bi++) {
+      var b = CITY_BLDS[bi];
+      pathLines += '<line x1="' + CITY_CENTER.x + '" y1="' + CITY_CENTER.y + '" x2="' + b.x + '" y2="' + b.y + '" stroke="url(#cpg)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="0.6 2.6"/>';
     }
-    // kadim taş (şehir ortasında)
+    h += '<svg class="cpaths" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="cpg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="rgba(255,206,94,.55)"/><stop offset="1" stop-color="rgba(255,206,94,.12)"/></linearGradient></defs>' + pathLines + '</svg>';
+    // vignette
+    h += '<div class="cvign"></div>';
+    // buildings (hex medallions)
+    for (var mi = 0; mi < CITY_BLDS.length; mi++) {
+      var m = CITY_BLDS[mi];
+      h += '<div class="cmed' + (m.lit ? ' lit' : '') + '" style="left:' + m.x + '%;top:' + m.y + '%;--acc:' + m.acc + ';--accGlow:' + m.glow + '" data-act="citybld" data-bld="' + m.id + '">';
+      h += '<div class="chex"><div class="chexf"></div><div class="chexi">' + (CITY_ICONS[m.id] || '') + '</div></div>';
+      h += '<div class="cplate">' + m.label + '</div>';
+      h += '</div>';
+    }
+    scene.innerHTML = h;
+    // kadim taş
     renderCityStone(scene, city);
     vp.appendChild(scene);
   }

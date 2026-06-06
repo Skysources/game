@@ -778,37 +778,63 @@ input.nm:focus{outline:none; border-color:var(--gold);}
 #bankXfer .xf-acts .sec{color:var(--text); background:rgba(0,0,0,.3); border-color:var(--border);}
 
 /* ============================================================
-   ŞEHİR İÇİ SAHNESİ — skyzone-sehir.html mockup'una göre
+   ŞEHİR İÇİ SAHNESİ — hex medallion + layered sky design
    ============================================================ */
-/* scene backgrounds */
 .city-scene{position:absolute; inset:0; overflow:hidden; z-index:3;}
-.city-scene-bg{position:absolute; inset:0;}
-.city-scene-bg.kar{background:linear-gradient(180deg,#1a2838 0%,#2a3a4a 25%,#4a5a6a 45%,#8a9aaa 60%,#c8d0d8 75%,#e0e4e8 100%);}
-.city-scene-bg.orman{background:linear-gradient(180deg,#0a180a 0%,#142a10 20%,#1e3a18 35%,#2a4a22 50%,#3a5a2e 65%,#4a6838 80%,#3a5028 100%);}
-.city-scene-bg.col{background:linear-gradient(180deg,#1a1208 0%,#3a2210 15%,#5a3818 30%,#7a4a20 50%,#a06028 65%,#c08040 80%,#d8a060 100%);}
-.city-scene-bg::after{content:''; position:absolute; inset:0; pointer-events:none;}
-.city-scene-bg.kar::after{background:radial-gradient(ellipse 60% 30% at 50% 20%,rgba(200,220,240,.15),transparent),radial-gradient(ellipse 40% 20% at 20% 15%,rgba(180,200,230,.12),transparent);}
-.city-scene-bg.orman::after{background:radial-gradient(ellipse 50% 30% at 30% 25%,rgba(40,100,30,.2),transparent),radial-gradient(ellipse 40% 25% at 70% 20%,rgba(30,80,20,.15),transparent);}
-.city-scene-bg.col::after{background:radial-gradient(ellipse 70% 30% at 50% 15%,rgba(255,200,100,.08),transparent),radial-gradient(ellipse 40% 30% at 80% 70%,rgba(200,150,80,.08),transparent);}
-
-/* decos */
-.cdeco{position:absolute; pointer-events:none; filter:drop-shadow(0 3px 6px rgba(0,0,0,.5)); opacity:.6; z-index:1;}
-/* path dots */
-.cpath-dot{position:absolute; width:5px; height:5px; border-radius:50%; background:rgba(200,180,140,.15); pointer-events:none; z-index:2;}
-
-/* buildings */
-.cbld{position:absolute; display:flex; flex-direction:column; align-items:center; cursor:pointer; transition:transform .15s; z-index:5; user-select:none; transform:translate(-50%,-50%);}
-.cbld:active{transform:translate(-50%,-50%) scale(.94);}
-.cbld-icon{width:60px; height:60px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:26px; position:relative; background:linear-gradient(180deg,#1e1a14,#0e0c08); box-shadow:0 6px 18px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);}
-.cbld-label{font-family:'Cinzel',serif; font-size:8px; font-weight:700; letter-spacing:1.2px; color:var(--textlit); text-shadow:0 1px 3px #000,0 0 8px #000; margin-top:5px; white-space:nowrap; text-transform:uppercase;}
-
-/* building frame styles */
-.cbld-icon.belediye{border:3px solid #8a8070; border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,.7),inset 0 0 12px rgba(140,130,110,.12),0 0 0 1.5px #4a4438;}
-.cbld-icon.atolye{border:3px solid #5a5040; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,.7),inset 0 0 10px rgba(200,120,40,.08);}
-.cbld-icon.banka{border:3px solid #4a6a4a; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,.7),inset 0 0 10px rgba(60,120,60,.1),0 0 0 2px #1a2a1a;}
-.cbld-icon.pazar{border:3.5px solid #6a4a2a; border-radius:4px; box-shadow:0 6px 20px rgba(0,0,0,.7),inset 0 0 10px rgba(140,100,50,.1);}
-.cbld-icon.kasa{border:2.5px solid var(--gold); border-radius:10px; box-shadow:0 6px 22px rgba(200,160,48,.3),inset 0 0 12px rgba(200,160,48,.06);}
-.cbld-icon.kapi{border:3px solid #6a6058; border-radius:10px 10px 4px 4px; box-shadow:0 6px 18px rgba(0,0,0,.7),inset 0 0 10px rgba(100,90,70,.1);}
+/* sky layers */
+.csky{position:absolute; inset:0; transition:opacity .5s;}
+.csky.kar{background:linear-gradient(180deg,#0f1f2e 0%,#1d3346 26%,#3d5d77 46%,#7f9fb4 64%,#c2d2dc 82%,#dde7ed 100%);}
+.csky.orman{background:linear-gradient(180deg,#0a1710 0%,#11281a 24%,#1d3f28 44%,#2f5a38 62%,#3f6b44 80%,#314f2c 100%);}
+.csky.col{background:linear-gradient(180deg,#241405 0%,#48280f 20%,#7a4a1d 40%,#a86c2c 60%,#cf9450 78%,#e3b873 100%);}
+.cglowtop{position:absolute; inset:0; pointer-events:none;}
+.cglowtop.kar{background:radial-gradient(ellipse 70% 34% at 50% 12%,rgba(200,225,245,.28),transparent 70%);}
+.cglowtop.orman{background:radial-gradient(ellipse 60% 32% at 42% 16%,rgba(120,200,90,.18),transparent 70%);}
+.cglowtop.col{background:radial-gradient(ellipse 60% 30% at 50% 10%,rgba(255,210,120,.3),transparent 70%);}
+.cskyline{position:absolute; left:0; right:0; top:30%; height:34%; pointer-events:none; opacity:.9;}
+.cskyline svg{width:100%; height:100%; display:block;}
+.cfog{position:absolute; left:0; right:0; top:46%; height:22%; pointer-events:none;}
+.cfog.kar{background:linear-gradient(180deg,transparent,rgba(220,232,240,.5));}
+.cfog.orman{background:linear-gradient(180deg,transparent,rgba(40,70,40,.45));}
+.cfog.col{background:linear-gradient(180deg,transparent,rgba(220,170,100,.4));}
+.cvign{position:absolute; inset:0; pointer-events:none; background:radial-gradient(120% 80% at 50% 42%,transparent 55%,rgba(6,6,8,.55) 100%);}
+/* particles */
+.cparticles{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
+.cpt{position:absolute; border-radius:50%; opacity:0; animation:cdrift linear infinite;}
+@keyframes cdrift{0%{transform:translateY(-10px) translateX(0);opacity:0;}10%{opacity:.7;}90%{opacity:.6;}100%{transform:translateY(360px) translateX(22px);opacity:0;}}
+/* plaza */
+.cplaza{position:absolute; left:50%; top:55%; transform:translate(-50%,-50%); width:330px; height:220px; pointer-events:none;}
+.cplaza .cdisc{position:absolute; inset:0; border-radius:50%; background:radial-gradient(50% 50% at 50% 42%,rgba(60,52,38,.85),rgba(30,26,18,.7) 60%,transparent 78%); box-shadow:inset 0 0 40px rgba(0,0,0,.6);}
+.cplaza .cring{position:absolute; border-radius:50%; border:1px solid rgba(200,160,48,.16);}
+.cplaza .cr1{inset:18% 8%;} .cplaza .cr2{inset:30% 20%;} .cplaza .cr3{inset:42% 32%;}
+/* paths svg */
+.cpaths{position:absolute; inset:0; z-index:2; pointer-events:none;}
+/* hex medallion buildings */
+.cmed{position:absolute; transform:translate(-50%,-50%); z-index:6; display:flex; flex-direction:column; align-items:center; cursor:pointer; user-select:none; transition:transform .14s;}
+.cmed:hover{transform:translate(-50%,-50%) scale(1.07);}
+.cmed:active{transform:translate(-50%,-50%) scale(.95);}
+.chex{position:relative; width:70px; height:76px; filter:drop-shadow(0 6px 12px rgba(0,0,0,.6)) drop-shadow(0 0 10px var(--acc,rgba(200,160,48,.4)));}
+.chexf,.chexi{position:absolute; inset:0; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);}
+.chexf{background:linear-gradient(157deg,#ffe49e,#ffba28 38%,#cf870b 70%,#7c5207);}
+.chexi{inset:3px; background:radial-gradient(120% 120% at 38% 24%,#2b2418,#161009 62%,#0d0905); display:grid; place-items:center;}
+.chexi::after{content:""; position:absolute; inset:0; background:radial-gradient(60% 55% at 50% 42%,var(--accGlow,transparent),transparent 72%);}
+.chex svg{width:42%; height:42%; color:var(--goldlit); position:relative; z-index:2; filter:drop-shadow(0 2px 3px rgba(0,0,0,.6));}
+.cmed.lit .chexf{background:linear-gradient(157deg,#fff0c0,#ffcf52 40%,#e7a916 72%,#9c6a10);}
+.cmed.lit .chex{filter:drop-shadow(0 6px 14px rgba(0,0,0,.6)) drop-shadow(0 0 16px rgba(255,206,94,.7));}
+.cplate{margin-top:6px; font-family:'Cinzel',serif; font-weight:700; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--textlit); background:rgba(10,8,5,.82); border:1px solid var(--rim,#b8902e); border-radius:7px; padding:2px 8px; text-shadow:0 1px 2px #000; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,.5);}
+/* kadim monument */
+.ckadim{position:absolute; left:50%; top:52%; transform:translate(-50%,-50%); z-index:7; display:flex; flex-direction:column; align-items:center; cursor:pointer; transition:transform .15s;}
+.ckadim:hover{transform:translate(-50%,-50%) scale(1.06);}
+.ckadim .cmon{position:relative; width:104px; height:104px; display:grid; place-items:center;}
+.ckadim .crunering{position:absolute; inset:0; border-radius:50%; border:1.5px dashed rgba(255,206,94,.4); animation:cspin 26s linear infinite;}
+.ckadim .crunering.cr2{inset:12px; border-style:dotted; border-color:rgba(255,206,94,.25); animation-duration:18s; animation-direction:reverse;}
+@keyframes cspin{to{transform:rotate(360deg);}}
+.ckadim .caura{position:absolute; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle,rgba(255,200,90,.32),transparent 66%); animation:cbreathe 3.6s ease-in-out infinite;}
+@keyframes cbreathe{0%,100%{transform:scale(.92);opacity:.7;}50%{transform:scale(1.08);opacity:1;}}
+.ckadim svg.cgem{width:54px; height:64px; position:relative; z-index:2; filter:drop-shadow(0 4px 10px rgba(0,0,0,.6)) drop-shadow(0 0 12px rgba(255,206,94,.7));}
+.ckadim .ckname{margin-top:2px; font-family:'Cinzel',serif; font-weight:700; font-size:10px; letter-spacing:.14em; color:var(--goldlit); text-transform:uppercase; text-shadow:0 1px 4px #000;}
+.ckadim .ckhpbar{width:96px; height:5px; border-radius:3px; background:rgba(0,0,0,.5); border:1px solid var(--rim,#b8902e); margin-top:4px; overflow:hidden;}
+.ckadim .ckhpbar i{display:block; height:100%; background:linear-gradient(90deg,#e7a916,#ffd86a); box-shadow:0 0 8px rgba(255,206,94,.6);}
+.ckadim .ckhp{font-family:'JetBrains Mono',monospace; font-weight:500; font-size:9px; color:#e8dcb0; margin-top:2px; text-shadow:0 1px 3px #000; display:flex; align-items:center; gap:4px;}
 
 /* city info bar */
 .city-info{position:absolute; bottom:86px; left:50%; transform:translateX(-50%); background:rgba(14,11,8,.9); backdrop-filter:blur(10px); border:1px solid var(--section-border); border-radius:14px; padding:8px 16px; z-index:15; display:flex; align-items:center; gap:10px; white-space:nowrap; font-size:10px;}
