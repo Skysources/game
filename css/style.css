@@ -73,7 +73,7 @@ body{background:#050403;font-family:'DM Sans',sans-serif;color:var(--text);displ
 .node.r{background:linear-gradient(180deg,#9c2c27,#481210);}
 @keyframes nodePulse{0%,100%{filter:brightness(1);}50%{filter:brightness(1.15);}}
 .node-icon{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:54px;height:60px;display:flex;align-items:center;justify-content:center; filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));}
-.node-icon svg{width:44px; height:44px;}
+.node-icon svg, .node-icon img{width:54px; height:60px; object-fit:contain;}
 .node-icon .emoji{font-size:32px;}
 .node-tier{position:absolute; bottom:4px; left:0; right:0; text-align:center; font-family:'Cinzel',serif; font-weight:700; color:#fff; font-size:14px; letter-spacing:.04em; text-shadow:0 1px 3px rgba(0,0,0,.85); z-index:3;}
 .node-tier.t2{color:#c898e8;}
@@ -1222,7 +1222,7 @@ input.nm:focus{outline:none; border-color:var(--gold);}
   .sb-right{gap:3px;}
   .buff-squares{max-width:120px; gap:3px;}
   .buff-sq{width:20px; height:20px; font-size:11px;}
-  .node{width:54px; height:74px;} .node-icon svg{width:38px; height:38px;} .node-tier{font-size:12px;}
+  .node{width:54px; height:74px;} .node-icon svg,.node-icon img{width:44px; height:50px;} .node-tier{font-size:12px;}
   .chat-bubble{width:96%; max-width:360px;}
   .chat-input{font-size:10px; padding:5px 8px;}
   .chat-send{width:28px; height:28px; font-size:12px;}

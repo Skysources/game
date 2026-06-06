@@ -37,7 +37,12 @@ SKY.UI = (function () {
     }
     return ART.mats['item-' + family + '-' + tier] || '<span class="emoji">📦</span>';
   }
-  function nodeSVG(family, tier) { return ART.nodes[family + '-' + tier] || '<span class="emoji">⛰️</span>'; }
+  const NODE_ART = window.SKY_NODE_ART || {};
+  function nodeSVG(family, tier) {
+    var key = family + '-' + tier;
+    if (NODE_ART[key]) return '<img src="' + NODE_ART[key] + '" alt="' + key + '"/>';
+    return ART.nodes[key] || '<span class="emoji">⛰️</span>';
+  }
 
   function toast(msg, ms = 1800) {
     const t = $('#toast'); t.innerHTML = msg; t.classList.add('show');
