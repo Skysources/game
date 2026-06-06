@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head><title>Clear All World Nodes</title></head>
+<body>
+<h2>Clear All World Nodes from Firebase</h2>
+<p id="status">Loading...</p>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyBB1MvRMBM-xApEVfHGFXDLEFMaQmZ5GDM",
+  authDomain: "game-facbd.firebaseapp.com",
+  databaseURL: "https://game-facbd-default-rtdb.firebaseio.com",
+  projectId: "game-facbd"
+});
+
+var status = document.getElementById('status');
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    status.textContent = 'Logged in as ' + user.uid + '. Deleting world nodes...';
+    firebase.database().ref('world').remove().then(function() {
+      status.textContent = '✅ All world nodes deleted! You can close this page and re-enter any zone in the game.';
+      status.style.color = 'green';
+    }).catch(function(err) {
+      status.textContent = '❌ Error: ' + err.message;
+      status.style.color = 'red';
+    });
+  } else {
+    status.textContent = 'Signing in anonymously...';
+    firebase.auth().signInAnonymously();
+  }
+});
+</script>
+</body>
+</html>
