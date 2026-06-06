@@ -207,10 +207,9 @@ SKY.UI = (function () {
         el.className = 'node ' + RK[n.colorIdx] + (g && g.nodeId === n.id ? ' gathering' : '');
         el.style.top = n.y + '%'; el.style.left = n.x + '%';
         el.dataset.act = 'opennode'; el.dataset.id = n.id;
-        const rarCol = D.RARITY[n.colorIdx] ? D.RARITY[n.colorIdx].color : '#d7d0c0';
         el.innerHTML = `<div class="node-icon">${nodeSVG(n.family, n.tier)}</div>
           <span class="node-tier ${tcls}">${ROMAN[n.tier]}</span>
-          <span class="node-timer" style="background:${rarCol}22;border-color:${rarCol}55;color:${rarCol}">${nodeTimeLeft(n)}</span>`;
+          <span class="node-timer">${nodeTimeLeft(n)}</span>`;
         canvas.insertBefore(el, dg);
       }
       // kadim taş yerleştir (field zone'larda)
