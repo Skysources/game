@@ -412,6 +412,14 @@ SKY.UI = (function () {
 
   // ---------- GATHER MODAL ----------
   let gNode = null;
+  let gatherPlayerInterval = null;
+  function startGatherPlayerPoll(z) {
+    stopGatherPlayerPoll();
+    gatherPlayerInterval = setInterval(function() { renderGatherPlayers(z); }, 8000);
+  }
+  function stopGatherPlayerPoll() {
+    if (gatherPlayerInterval) { clearInterval(gatherPlayerInterval); gatherPlayerInterval = null; }
+  }
   function openGather(nodeId) {
     const n = W.getNodes().find(x => x.id === nodeId);
     if (!n) return;
@@ -444,8 +452,9 @@ SKY.UI = (function () {
     // reset drops
     gatherInvCat = 'all';
     renderGatherInv();
-    // render players with interaction buttons
+    // render players with interaction buttons + start polling
     renderGatherPlayers(z);
+    startGatherPlayerPoll(z);
     setGatherUI(false);
     openMB('gatherModal');
   }
@@ -2425,8 +2434,8 @@ SKY.UI = (function () {
 
   // ---------- modal helpers ----------
   function openMB(id) { $('#' + id).classList.add('active'); }
-  function closeMB(id) { $('#' + id).classList.remove('active'); }
-  function closeAllModals() { $$('.modal-bg').forEach(m => m.classList.remove('active')); }
+  function closeMB(id) { $('#' + id).classList.remove('active'); if (id === 'gatherModal') stopGatherPlayerPoll(); }
+  function closeAllModals() { $$('.modal-bg').forEach(m => m.classList.remove('active')); stopGatherPlayerPoll(); }
 
   // ---------- screen switch ----------
   function show(screen) {
@@ -2438,17 +2447,21 @@ SKY.UI = (function () {
     // dungeon is now a modal, no screen to show
     // banka ve bag artık modal — show() ile açılmaz
     renderTop();
-    // Hide chat & inventory on menu screen
+    // Hide chat/inv on menu & world screens; PvP icon only on map (zone)
     var inv = $('#invFloatBtn'), chat = $('#chatBar'), evt = $('#evtPvpIcon');
+    var hideChat = (screen === 'menu' || screen === 'world');
     if (screen === 'menu') {
       if (inv) inv.style.display = 'none';
-      if (chat) chat.style.display = 'none';
       if (evt) evt.style.display = 'none';
-    } else {
+    } else if (screen === 'map') {
       if (inv) inv.style.display = '';
-      if (chat) chat.style.display = '';
-      // evt icon is managed by EVT.tick(), don't force show
+      // evt icon is managed by EVT.tick() — allow it on map
+    } else {
+      // world or other screens
+      if (inv) inv.style.display = '';
+      if (evt) evt.style.display = 'none';
     }
+    if (chat) chat.style.display = hideChat ? 'none' : '';
   }
 
   // ============ RARE DROP BANNER ============

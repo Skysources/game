@@ -1329,3 +1329,18 @@ input.nm:focus{outline:none; border-color:var(--gold);}
   .evt-score-kills{font-size:26px;}
   .evt-enemy-list{max-height:300px;}
 }
+
+/* ============================================================
+   DEATH OVERLAY
+   ============================================================ */
+.death-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background .4s;pointer-events:all;}
+.death-overlay.show{background:rgba(0,0,0,.85);}
+.death-box{text-align:center;opacity:0;transform:scale(.8);transition:opacity .4s,transform .4s;}
+.death-overlay.show .death-box{opacity:1;transform:scale(1);}
+.death-skull{font-size:64px;margin-bottom:12px;animation:deathPulse 1s ease-in-out infinite;}
+.death-title{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:#d95a49;letter-spacing:2px;text-shadow:0 0 20px rgba(217,90,73,.5);margin-bottom:8px;}
+.death-sub{font-size:14px;color:var(--textdim);margin-bottom:20px;}
+.death-bar{width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto;overflow:hidden;}
+.death-bar-fill{width:0;height:100%;background:linear-gradient(90deg,#d95a49,#e2913c);border-radius:2px;animation:deathFill 3s linear forwards;}
+@keyframes deathPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+@keyframes deathFill{0%{width:0}100%{width:100%}}

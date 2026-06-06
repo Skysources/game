@@ -656,14 +656,27 @@
       UI.toast('👹 ' + t('dg.boss_appeared') + ' (' + ev.queueLen + '/5)');
     }
   }
+  function showDeathOverlay(cb) {
+    var ov = document.createElement('div');
+    ov.className = 'death-overlay';
+    ov.innerHTML = '<div class="death-box"><div class="death-skull">💀</div><div class="death-title">' + t('death.title') + '</div><div class="death-sub">' + t('death.teleport') + '</div><div class="death-bar"><div class="death-bar-fill"></div></div></div>';
+    document.body.appendChild(ov);
+    requestAnimationFrame(function() { ov.classList.add('show'); });
+    setTimeout(function() {
+      ov.classList.remove('show');
+      setTimeout(function() { ov.remove(); if (cb) cb(); }, 400);
+    }, 3000);
+  }
   function handleDeath() {
-    UI.toast(t('dg.died'));
-    UI.showDungeonSummary();
+    UI.closeMB('dungeonModal');
     DUN.leave();
-    S.get().zone = 'city_' + S.get().city;
-    W.enterZone(S.get().zone);
-    try { FB.updateZone(S.get().zone); } catch(e) {}
-    UI.show('map'); initMapView();
+    showDeathOverlay(function() {
+      UI.showDungeonSummary();
+      S.get().zone = 'city_' + S.get().city;
+      W.enterZone(S.get().zone);
+      try { FB.updateZone(S.get().zone); } catch(e) {}
+      UI.show('map'); initMapView();
+    });
   }
   // dungeon'da ölünce: kısa bekleme, sonra devam (şehre atılmaz)
   function dungeonRespawn() {
@@ -1761,20 +1774,24 @@
             UI.toast('💎 +1 ' + t('misc.stone3'));
           }
         } else {
-          // Kaybetti
+          // Kaybetti — ölüm ekranı göster, şehre ışınla
           P.stats.deaths++;
-          UI.toast('💀 ' + t('pvp.lost'));
+          if (chipEl) { chipEl.innerHTML = origHTML; chipEl.style.opacity = '1'; chipEl.style.pointerEvents = ''; }
+          showDeathOverlay(function() {
+            UI.closeMB('gatherModal');
+            W.stopGather();
+            S.get().zone = 'city_' + S.get().city;
+            W.enterZone(S.get().zone);
+            try { FB.updateZone(S.get().zone); } catch(e) {}
+            UI.show('map'); initMapView();
+          });
+          UI.renderTop();
+          return;
         }
         // Düşmanı yenile (ölü göster)
         if (chipEl) {
-          if (result.win) {
-            chipEl.innerHTML = '💀 ' + name + ' <span style="font-size:8px;color:var(--danger)">' + t('pvp.defeated') + '</span>';
-            chipEl.style.opacity = '0.3';
-          } else {
-            chipEl.innerHTML = origHTML;
-            chipEl.style.opacity = '1';
-            chipEl.style.pointerEvents = '';
-          }
+          chipEl.innerHTML = '💀 ' + name + ' <span style="font-size:8px;color:var(--danger)">' + t('pvp.defeated') + '</span>';
+          chipEl.style.opacity = '0.3';
         }
         UI.renderTop();
       }

@@ -319,6 +319,8 @@ SKY.LANG = (function () {
     'pvp.fighting': { tr: 'Savaşılıyor...', en: 'Fighting...' },
     'pvp.won': { tr: 'Kazandın!', en: 'You won!' },
     'pvp.lost': { tr: 'Kaybettin!', en: 'You lost!' },
+    'death.title': { tr: 'Öldün!', en: 'You Died!' },
+    'death.teleport': { tr: 'Şehre ışınlanıyorsun...', en: 'Teleporting to city...' },
 
     // ======================== CHAT ========================
     'chat.placeholder': { tr: 'Mesaj yaz...', en: 'Type a message...' },

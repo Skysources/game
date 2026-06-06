@@ -267,7 +267,10 @@ SKY.EVT = (function () {
   // ---- UI ----
   function showIcon() {
     var icon = $('#evtPvpIcon');
-    if (icon) icon.style.display = 'flex';
+    if (!icon) return;
+    // Only show PvP icon when on zone map (not menu, world, etc.)
+    if (SKY.UI && SKY.UI.activeScreen !== 'map') { icon.style.display = 'none'; return; }
+    icon.style.display = 'flex';
   }
 
   function hideIcon() {
