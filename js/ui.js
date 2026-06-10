@@ -357,8 +357,9 @@ SKY.UI = (function () {
     }
   }
 
-  // ---------- WORLD (Arkana scenic map) ----------
+  // ---------- WORLD (Radial polar map) ----------
   var _worldBuilt = false, _worldLang = '';
+  // scenic thumbnail generator for card circles
   function _scenic(p) {
     var snowCap = p.snow ? "<path d='M50 37 L57 45 L43 45 Z' fill='" + p.snow + "'/>" : '';
     var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid slice'>" +
@@ -379,73 +380,246 @@ SKY.UI = (function () {
     barren: {s1:'#e2c99c',s2:'#c0935a',mtn:'#955f37',ground:'#b3854e',water:'#8a9a6a'},
     core:   {s1:'#eaa06e',s2:'#ad4334',mtn:'#722420',ground:'#bf4d39',water:'#f3c75e'}
   };
-  var _WNODES = [
-    {id:'city_kar',  act:'travelcity', cls:'w-t-city w-sz-city', badge:'world.city_badge', name:'city.kar',          sub:'world.capital', bio:'snow',   x:215, y:60},
-    {id:'t1_kar',    act:'travel',     cls:'w-t-1 w-sz-zone',    badge:null,               name:'world.t1_kar_name', sub:null,            bio:'snow',   x:215, y:140, badgeTxt:'SAFE', badgeFix:true},
-    {id:'t2_kar',    act:'travel',     cls:'w-t-2 w-sz-zone',    badge:null,               name:'world.t2_vadi',     sub:null,            bio:'valley', x:215, y:216, badgeTxt:'PVP', badgeFix:true},
-    {id:'t3_merkez', act:'travel',     cls:'w-t-3 w-sz-core',    badge:'world.center_badge',name:'world.t3_center',  sub:null,            bio:'core',   x:215, y:300, subTxt:'TIER III'},
-    {id:'t2_orman',  act:'travel',     cls:'w-t-2 w-sz-zone',    badge:null,               name:'world.t2_bataklik', sub:null,            bio:'swamp',  x:166, y:386, badgeTxt:'PVP', badgeFix:true},
-    {id:'t1_orman',  act:'travel',     cls:'w-t-1 w-sz-zone',    badge:null,               name:'world.t1_orman_name',sub:null,           bio:'forest', x:121, y:466, badgeTxt:'SAFE', badgeFix:true},
-    {id:'city_orman',act:'travelcity', cls:'w-t-city w-sz-city', badge:'world.city_badge', name:'city.orman',        sub:'world.capital', bio:'forest', x:72,  y:552},
-    {id:'t2_col',    act:'travel',     cls:'w-t-2 w-sz-zone',    badge:null,               name:'world.t2_corak',    sub:null,            bio:'barren', x:264, y:386, badgeTxt:'PVP', badgeFix:true},
-    {id:'t1_col',    act:'travel',     cls:'w-t-1 w-sz-zone',    badge:null,               name:'world.t1_col_name', sub:null,            bio:'desert', x:309, y:466, badgeTxt:'SAFE', badgeFix:true},
-    {id:'city_col',  act:'travelcity', cls:'w-t-city w-sz-city', badge:'world.city_badge', name:'city.col',          sub:'world.capital', bio:'desert', x:358, y:552}
+  // Radial map constants
+  var _MCX = 215, _MCY = 348, _MKY = 1.30;
+  var _MLV = [56, 108, 156, 202];
+  var _MSTEP = 5;
+  var _mrad = function(d) { return d * Math.PI / 180; };
+  function _mR(level, a) {
+    a = ((a % 360) + 360) % 360;
+    var b = _MLV[level];
+    return b * (1 + 0.055 * Math.sin(a * 0.066 + level * 13) + 0.04 * Math.sin(a * 0.13 + level * 5));
+  }
+  var _mpx = function(r, a) { return (_MCX + r * Math.cos(_mrad(a))).toFixed(1); };
+  var _mpy = function(r, a) { return (_MCY + r * Math.sin(_mrad(a)) * _MKY).toFixed(1); };
+  function _mpt(level, a) { return _mpx(_mR(level, a), a) + ' ' + _mpy(_mR(level, a), a); }
+  function _mband(i, a0, a1) {
+    var d = 'M' + _mpt(i + 1, a0);
+    for (var a = a0 + _MSTEP; a <= a1; a += _MSTEP) d += ' L' + _mpt(i + 1, a);
+    d += ' L' + _mpt(i, a1);
+    for (var a = a1 - _MSTEP; a >= a0; a -= _MSTEP) d += ' L' + _mpt(i, a);
+    return d + ' Z';
+  }
+  function _mring(level) {
+    var d = 'M' + _mpt(level, 0);
+    for (var a = _MSTEP; a < 360; a += _MSTEP) d += ' L' + _mpt(level, a);
+    return d + ' Z';
+  }
+  var _MTER = [
+    { key: 'kar', a0: -150, a1: -30, mid: -90, pal: ['#9fb4c4', '#b7c9d6', '#cfdde6'], glyph: 'peak' },
+    { key: 'col', a0: -30, a1: 90, mid: 30, pal: ['#a87f42', '#cba45e', '#dec27f'], glyph: 'dune' },
+    { key: 'orman', a0: 90, a1: 210, mid: 150, pal: ['#4a7440', '#5b8a47', '#6f9b54'], glyph: 'pine' }
   ];
-  var _WARMS = [
-    ['city_kar','t1_kar','t2_kar','t3_merkez'],
-    ['city_orman','t1_orman','t2_orman','t3_merkez'],
-    ['city_col','t1_col','t2_col','t3_merkez']
+  var _mfr = function(x) { return x - Math.floor(x); };
+  var _mrn = function(i) { return _mfr(Math.sin(i * 127.13 + 7.7) * 43758.55); };
+  function _mglyph(kind, x, y, s) {
+    var GC = { pine: '#2e5526', peak: '#8fa6b8', dune: '#b08a48' };
+    var c = GC[kind] || '#888';
+    if (kind === 'pine') {
+      return '<ellipse cx="' + (x + 1.5 * s) + '" cy="' + (y + 5.6 * s) + '" rx="' + (4.6 * s) + '" ry="' + (1.4 * s) + '" fill="#000" opacity=".18"/>' +
+        '<path d="M' + x + ' ' + (y - 5 * s) + ' L' + (x + 3.4 * s) + ' ' + (y + 2.4 * s) + ' L' + (x - 3.4 * s) + ' ' + (y + 2.4 * s) + ' Z M' + x + ' ' + (y - 2 * s) + ' L' + (x + 4.4 * s) + ' ' + (y + 5 * s) + ' L' + (x - 4.4 * s) + ' ' + (y + 5 * s) + ' Z" fill="' + c + '"/>' +
+        '<path d="M' + x + ' ' + (y - 5 * s) + ' L' + (x + 3.4 * s) + ' ' + (y + 2.4 * s) + ' L' + (x + 1 * s) + ' ' + (y + 2.4 * s) + ' Z M' + x + ' ' + (y - 2 * s) + ' L' + (x + 4.4 * s) + ' ' + (y + 5 * s) + ' L' + (x + 1.2 * s) + ' ' + (y + 5 * s) + ' Z" fill="#24451e"/>';
+    }
+    if (kind === 'peak') {
+      return '<ellipse cx="' + (x + 2 * s) + '" cy="' + (y + 4.6 * s) + '" rx="' + (6 * s) + '" ry="' + (1.6 * s) + '" fill="#000" opacity=".15"/>' +
+        '<path d="M' + (x - 5.6 * s) + ' ' + (y + 4 * s) + ' L' + x + ' ' + (y - 5.4 * s) + ' L' + (x + 5.6 * s) + ' ' + (y + 4 * s) + ' Z" fill="' + c + '"/>' +
+        '<path d="M' + x + ' ' + (y - 5.4 * s) + ' L' + (x + 5.6 * s) + ' ' + (y + 4 * s) + ' L' + (x + 1.4 * s) + ' ' + (y + 4 * s) + ' Z" fill="#5d7488"/>' +
+        '<path d="M' + (x - 1.7 * s) + ' ' + (y - 2.2 * s) + ' L' + x + ' ' + (y - 5.4 * s) + ' L' + (x + 1.7 * s) + ' ' + (y - 2.2 * s) + ' L' + (x + 0.6 * s) + ' ' + (y - 1.4 * s) + ' L' + (x - 0.6 * s) + ' ' + (y - 2.4 * s) + ' Z" fill="#fff"/>';
+    }
+    // dune
+    return '<path d="M' + (x - 5 * s) + ' ' + (y + 3 * s) + ' Q' + x + ' ' + (y - 4 * s) + ' ' + (x + 5 * s) + ' ' + (y + 3 * s) + '" fill="none" stroke="' + c + '" stroke-width="' + (1.7 * s) + '" stroke-linecap="round"/>' +
+      '<path d="M' + (x - 2.4 * s) + ' ' + (y + 4.6 * s) + ' Q' + (x + 1.4 * s) + ' ' + (y + 0.4 * s) + ' ' + (x + 5.4 * s) + ' ' + (y + 4.6 * s) + '" fill="none" stroke="#8a6a30" stroke-width="' + (1.1 * s) + '" stroke-linecap="round" opacity=".8"/>';
+  }
+  // Zone cards positioned on the radial map
+  var _WCARD_SPOTS = {
+    kar:   { t2: [258, 252], t1: [160, 184], city: [222, 112] },
+    col:   { t2: [300, 388], t1: [332, 474], city: [320, 580] },
+    orman: { t2: [130, 388], t1: [98, 474],  city: [110, 580] }
+  };
+  var _WCARDS = [
+    { id: 'city_kar',   act: 'travelcity', x: 222, y: 112, g: 'zg-city', num: '★', nameKey: 'city.kar',           bio: 'snow',   tag: '★',   color: '#e0c061', descKey: 'world.capital' },
+    { id: 't1_kar',     act: 'travel',     x: 160, y: 184, g: 'zg-1',    num: 'I',  nameKey: 'world.t1_kar_name',  bio: 'snow',   tag: 'I',   color: '#5cc06f', descKey: 'travel.pvp_safe' },
+    { id: 't2_kar',     act: 'travel',     x: 258, y: 252, g: 'zg-2',    num: 'II', nameKey: 'world.t2_vadi',      bio: 'valley', tag: 'II',  color: '#5a9bdf', descKey: 'travel.pvp_blue' },
+    { id: 'city_orman', act: 'travelcity', x: 110, y: 580, g: 'zg-city', num: '★', nameKey: 'city.orman',          bio: 'forest', tag: '★',   color: '#e0c061', descKey: 'world.capital' },
+    { id: 't1_orman',   act: 'travel',     x: 98,  y: 474, g: 'zg-1',    num: 'I',  nameKey: 'world.t1_orman_name',bio: 'forest', tag: 'I',   color: '#5cc06f', descKey: 'travel.pvp_safe' },
+    { id: 't2_orman',   act: 'travel',     x: 130, y: 388, g: 'zg-2',    num: 'II', nameKey: 'world.t2_bataklik',  bio: 'swamp',  tag: 'II',  color: '#5a9bdf', descKey: 'travel.pvp_blue' },
+    { id: 'city_col',   act: 'travelcity', x: 320, y: 580, g: 'zg-city', num: '★', nameKey: 'city.col',            bio: 'desert', tag: '★',   color: '#e0c061', descKey: 'world.capital' },
+    { id: 't1_col',     act: 'travel',     x: 332, y: 474, g: 'zg-1',    num: 'I',  nameKey: 'world.t1_col_name',  bio: 'desert', tag: 'I',   color: '#5cc06f', descKey: 'travel.pvp_safe' },
+    { id: 't2_col',     act: 'travel',     x: 300, y: 388, g: 'zg-2',    num: 'II', nameKey: 'world.t2_corak',     bio: 'barren', tag: 'II',  color: '#5a9bdf', descKey: 'travel.pvp_blue' },
+    { id: 't3_merkez',  act: 'travel',     x: 215, y: 348, g: 'zg-3 core', num: 'III', nameKey: 'world.t3_center', bio: 'core',   tag: 'III', color: '#e3564b', descKey: 'world.center_badge' }
   ];
+
   function _buildWorld() {
     var curLang = SKY.LANG.getLang();
     if (_worldBuilt && _worldLang === curLang) return;
     _worldBuilt = true; _worldLang = curLang;
-    var pos = {};
-    for (var i = 0; i < _WNODES.length; i++) pos[_WNODES[i].id] = [_WNODES[i].x, _WNODES[i].y];
-    // SVG connections
-    var svgEl = $('#wLinks');
-    var defs = '<defs><filter id="wglow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
-    for (var ai = 0; ai < _WARMS.length; ai++) {
-      var a = pos[_WARMS[ai][0]], c = pos[_WARMS[ai][3]];
-      defs += '<linearGradient id="wag' + ai + '" gradientUnits="userSpaceOnUse" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + c[0] + '" y2="' + c[1] + '">' +
-        '<stop offset="0" stop-color="#e0c061"/><stop offset="0.34" stop-color="#5cc06f"/>' +
-        '<stop offset="0.68" stop-color="#5a9bdf"/><stop offset="1" stop-color="#e3564b"/></linearGradient>';
+
+    // === Build procedural SVG terrain ===
+    var S = '';
+    // ocean bg
+    S += '<rect width="430" height="700" fill="url(#ocean)"/>';
+    // ocean ripples
+    for (var i = 0; i < 4; i++) {
+      var f = 1.13 + i * 0.11;
+      var d = 'M' + (_MCX + _MLV[3] * f).toFixed(1) + ' ' + _MCY;
+      for (var a = _MSTEP; a < 360; a += _MSTEP) {
+        var r = _MLV[3] * f * (1 + 0.04 * Math.sin(a * 0.09 + i * 7));
+        d += ' L' + (_MCX + r * Math.cos(_mrad(a))).toFixed(1) + ' ' + (_MCY + r * Math.sin(_mrad(a)) * _MKY).toFixed(1);
+      }
+      S += '<path d="' + d + ' Z" fill="none" stroke="#24465e" stroke-width="1.3" opacity="' + (0.7 - 0.15 * i) + '"/>';
     }
-    defs += '</defs>';
-    var body = '';
-    // faint triangle
-    var tri = [pos['city_kar'], pos['city_orman'], pos['city_col']];
-    body += '<path d="M' + tri[0] + ' L' + tri[1] + ' L' + tri[2] + ' Z" fill="rgba(224,192,97,.04)" stroke="rgba(224,192,97,.22)" stroke-width="1.5" stroke-dasharray="2 7" stroke-linejoin="round"/>';
-    for (var ai = 0; ai < _WARMS.length; ai++) {
-      var d = 'M' + _WARMS[ai].map(function(id) { return pos[id].join(' '); }).join(' L');
-      body += '<path d="' + d + '" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>';
-      body += '<path d="' + d + '" fill="none" stroke="url(#wag' + ai + ')" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#wglow)"/>';
-      body += '<path d="' + d + '" fill="none" stroke="#fff8e0" stroke-opacity=".85" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 14" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="0" to="-48" dur="1.6s" repeatCount="indefinite"/></path>';
+    // islets
+    for (var k = 0; k < 6; k++) {
+      var ia = 20 + k * 58 + _mrn(k + 40) * 30, ir = _MLV[3] * (1.22 + 0.16 * _mrn(k + 50));
+      var ix = _MCX + ir * Math.cos(_mrad(ia)), iy = _MCY + ir * Math.sin(_mrad(ia)) * _MKY, is = 3 + 4 * _mrn(k + 60);
+      if (iy >= 120 && iy <= 640) {
+        S += '<ellipse cx="' + ix.toFixed(0) + '" cy="' + (iy + is * 0.4).toFixed(0) + '" rx="' + (is * 1.5).toFixed(1) + '" ry="' + (is * 0.7).toFixed(1) + '" fill="#0a1622"/>';
+        S += '<ellipse cx="' + ix.toFixed(0) + '" cy="' + iy.toFixed(0) + '" rx="' + (is * 1.4).toFixed(1) + '" ry="' + (is * 0.65).toFixed(1) + '" fill="#c8ab6b"/>';
+        S += '<ellipse cx="' + ix.toFixed(0) + '" cy="' + (iy - 1.5).toFixed(0) + '" rx="' + (is * 0.9).toFixed(1) + '" ry="' + (is * 0.42).toFixed(1) + '" fill="#5b8a47"/>';
+      }
     }
-    svgEl.innerHTML = defs + body;
-    // render nodes
+    // land shadow + base
+    S += '<path d="' + _mring(3) + '" fill="#060a0e" opacity=".7" transform="translate(4 8)"/>';
+    S += '<path d="' + _mring(3) + '" fill="#3c3a30"/>';
+    // terrain bands + textures
+    for (var ti = 0; ti < _MTER.length; ti++) {
+      var ter = _MTER[ti];
+      for (var i = 0; i < 3; i++) {
+        var bd = _mband(i, ter.a0, ter.a1);
+        S += '<path d="' + bd + '" fill="' + ter.pal[i] + '"/>';
+        S += '<clipPath id="cp' + ti + i + '"><path d="' + bd + '"/></clipPath>';
+        var tex = '';
+        for (var j = 0; j < 9; j++) {
+          var sd = ti * 97 + i * 31 + j * 7;
+          var ta = ter.a0 + 12 + (ter.a1 - ter.a0 - 24) * _mrn(sd);
+          var trr = _MLV[i] + 8 + (_MLV[i + 1] - _MLV[i] - 16) * _mrn(sd + 3);
+          var tx = +_mpx(trr, ta), ty = +_mpy(trr, ta);
+          var trx = 9 + 15 * _mrn(sd + 5), tryy = trx * (0.4 + 0.25 * _mrn(sd + 7));
+          tex += '<ellipse cx="' + tx + '" cy="' + ty + '" rx="' + trx.toFixed(1) + '" ry="' + tryy.toFixed(1) + '" transform="rotate(' + (_mrn(sd + 9) * 180).toFixed(0) + ' ' + tx + ' ' + ty + ')" fill="' + (j % 2 ? '#ffffff' : '#000000') + '" opacity="' + (j % 2 ? '.06' : '.08') + '"/>';
+        }
+        for (var j = 0; j < 12; j++) {
+          var sd = ti * 61 + i * 17 + j * 13;
+          var ta = ter.a0 + 8 + (ter.a1 - ter.a0 - 16) * _mrn(sd + 1);
+          var trr = _MLV[i] + 5 + (_MLV[i + 1] - _MLV[i] - 10) * _mrn(sd + 2);
+          tex += '<circle cx="' + _mpx(trr, ta) + '" cy="' + _mpy(trr, ta) + '" r="' + (0.7 + 0.9 * _mrn(sd + 4)).toFixed(1) + '" fill="#000" opacity=".12"/>';
+        }
+        S += '<g clip-path="url(#cp' + ti + i + ')">' + tex + '</g>';
+      }
+    }
+    // coast sand rim
+    S += '<path d="' + _mring(3) + '" fill="none" stroke="#c8ab6b" stroke-width="5" opacity=".85"/>';
+    // rivers + lakes + roads
+    for (var ti = 0; ti < _MTER.length; ti++) {
+      var ter = _MTER[ti];
+      var ar = ter.mid + (ti === 0 ? 26 : -24);
+      var pts = [];
+      for (var rr = _MLV[0] + 2; rr <= _MLV[3] + 4; rr += 10) {
+        var ra = ar + 9 * Math.sin(rr * 0.055 + ti * 2.1);
+        pts.push(_mpx(rr, ra) + ' ' + _mpy(rr, ra));
+      }
+      var rd = 'M' + pts.join(' L');
+      S += '<path d="' + rd + '" fill="none" stroke="#2e5470" stroke-width="4.6" stroke-linecap="round" opacity=".75"/>';
+      S += '<path d="' + rd + '" fill="none" stroke="#5b9bc8" stroke-width="2.6" stroke-linecap="round"/>';
+      S += '<path d="' + rd + '" fill="none" stroke="#9fd0ea" stroke-width="1" stroke-linecap="round" opacity=".55"/>';
+      // lake
+      var la = ter.mid + 34, lr = (_MLV[1] + _MLV[2]) / 2;
+      var lx = +_mpx(lr, la), ly = +_mpy(lr, la);
+      S += '<ellipse cx="' + lx + '" cy="' + (ly + 1.5) + '" rx="12" ry="6.5" fill="#2e5470" opacity=".7"/>';
+      S += '<ellipse cx="' + lx + '" cy="' + ly + '" rx="11" ry="5.8" fill="#5b9bc8"/>';
+      S += '<ellipse cx="' + (lx - 2) + '" cy="' + (ly - 1.2) + '" rx="5.5" ry="2.4" fill="#9fd0ea" opacity=".6"/>';
+      // road
+      var rp = [];
+      for (var rr = _MLV[3] * 0.86; rr >= 10; rr -= 12) {
+        var ra = ter.mid - 7 * Math.sin(rr * 0.05 + ti);
+        rp.push(_mpx(rr, ra) + ' ' + _mpy(rr, ra));
+      }
+      var rdd = 'M' + rp.join(' L');
+      S += '<path d="' + rdd + '" fill="none" stroke="#5e4c2a" stroke-width="3.6" stroke-linecap="round" opacity=".5"/>';
+      S += '<path d="' + rdd + '" fill="none" stroke="#d8c08a" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round" opacity=".85"/>';
+    }
+    // core
+    S += '<path d="' + _mring(0) + '" fill="#7e2a20"/>';
+    S += '<path d="' + _mring(0) + '" fill="none" stroke="#3f0e09" stroke-width="7" opacity=".55"/>';
+    // lava cracks
+    for (var k = 0; k < 7; k++) {
+      var a0c = k * 51 + _mrn(k + 3) * 26;
+      var cp = 'M ' + _MCX + ' ' + _MCY, rr = 8, aa = a0c;
+      while (rr < _MLV[0] * 0.82) { rr += 9 + 7 * _mrn(k * 9 + rr); aa += 20 * (_mrn(k * 7 + rr) - 0.5); cp += ' L' + _mpx(rr, aa) + ' ' + _mpy(rr, aa); }
+      S += '<path d="' + cp + '" fill="none" stroke="#ff8a3a" stroke-width="1.5" opacity=".8" filter="url(#glo)"/>';
+    }
+    S += '<path d="' + _mring(0) + '" fill="url(#coreglow)" pointer-events="none"/>';
+    S += '<path d="' + _mring(0) + '" fill="none" stroke="#e3564b" stroke-width="2.4" opacity=".95" filter="url(#glo)"/>';
+    S += '<path d="' + _mring(1) + '" fill="none" stroke="#5a9bdf" stroke-width="2" opacity=".85" filter="url(#glo)"/>';
+    S += '<path d="' + _mring(2) + '" fill="none" stroke="#5cc06f" stroke-width="2" opacity=".85" filter="url(#glo)"/>';
+    S += '<path d="' + _mring(3) + '" fill="none" stroke="#e0c061" stroke-width="2.6" opacity=".95" filter="url(#glo)"/>';
+    // border lines
+    [-150, -30, 90].forEach(function(a) {
+      S += '<line x1="' + _mpx(_mR(0, a), a) + '" y1="' + _mpy(_mR(0, a), a) + '" x2="' + _mpx(_mR(3, a), a) + '" y2="' + _mpy(_mR(3, a), a) + '" stroke="#e0c061" stroke-width="2" stroke-dasharray="3 6" stroke-linecap="round" opacity=".8" filter="url(#glo)"/>';
+    });
+    // decorative glyphs
+    for (var ti = 0; ti < _MTER.length; ti++) {
+      var ter = _MTER[ti];
+      for (var k = 0; k < 13; k++) {
+        var sd = ti * 131 + k * 29;
+        var ga = ter.a0 + 16 + (ter.a1 - ter.a0 - 32) * _mrn(sd);
+        var grr = _MLV[1] + (_MLV[3] - _MLV[1]) * (0.08 + 0.78 * _mrn(sd + 11));
+        var gs = 0.95 + 0.85 * _mrn(sd + 17);
+        S += _mglyph(ter.glyph, +_mpx(grr, ga), +_mpy(grr, ga), gs);
+      }
+    }
+    // write SVG
+    $('#wSvg').innerHTML = '<defs>' +
+      '<radialGradient id="ocean" cx=".5" cy=".48" r=".75"><stop offset="0" stop-color="#16344a"/><stop offset=".62" stop-color="#0e2235"/><stop offset="1" stop-color="#081420"/></radialGradient>' +
+      '<radialGradient id="coreglow"><stop offset="0" stop-color="#ff8a4a" stop-opacity=".55"/><stop offset=".7" stop-color="#c23a26" stop-opacity=".15"/><stop offset="1" stop-color="#c23a26" stop-opacity="0"/></radialGradient>' +
+      '<filter id="glo" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
+      '</defs>' + S;
+
+    // === Build zone cards ===
     var html = '';
-    for (var i = 0; i < _WNODES.length; i++) {
-      var n = _WNODES[i];
-      var badgeText = n.badgeFix ? n.badgeTxt : (n.badge ? t(n.badge) : '');
-      var subText = n.sub ? t(n.sub) : (n.subTxt || ('TIER ' + (n.cls.indexOf('w-t-1') >= 0 ? 'I' : n.cls.indexOf('w-t-2') >= 0 ? 'II' : 'III')));
-      html += '<div class="w-node ' + n.cls + '" style="left:' + n.x + 'px;top:' + n.y + 'px" data-act="' + n.act + '" data-z="' + n.id + '">' +
-        '<div class="w-thumb">' +
-        '<img class="w-tile" alt="" src="' + _scenic(_WBIO[n.bio]) + '"/>' +
-        (badgeText ? '<span class="w-badge">' + badgeText + '</span>' : '') +
-        '<div class="w-scrim"><b>' + t(n.name) + '</b><small>' + subText + '</small></div>' +
-        '</div></div>';
+    for (var i = 0; i < _WCARDS.length; i++) {
+      var c = _WCARDS[i];
+      var nm = t(c.nameKey);
+      html += '<div class="zcard ' + c.g + '" style="left:' + c.x + 'px;top:' + c.y + 'px" data-act="' + c.act + '" data-z="' + c.id + '" data-i="' + i + '">' +
+        '<div class="zart"><img alt="" src="' + _scenic(_WBIO[c.bio]) + '"/></div>' +
+        '<div class="znum">' + c.num + '</div>' +
+        '<div class="zplate">' + nm + '</div>' +
+        '</div>';
     }
-    $('#wNodes').innerHTML = html;
+    $('#wCards').innerHTML = html;
   }
+
+  function _updateWorldInfo(c) {
+    var info = $('#wInfo');
+    if (!info) return;
+    info.style.setProperty('--wic', c.color);
+    var sw = info.querySelector('.w-info-sw');
+    if (sw) sw.textContent = c.tag;
+    var nm = info.querySelector('#wInfoNm');
+    if (nm) nm.textContent = t(c.nameKey);
+    var ds = info.querySelector('#wInfoDs');
+    if (ds) ds.textContent = t(c.descKey);
+  }
+
   function renderWorld() {
     _buildWorld();
     var cur = S.get().zone;
     var hereText = t('world.here');
-    $$('.w-node').forEach(function(z) {
+    $$('.zcard').forEach(function(z) {
       var isHere = z.dataset.z === cur;
       z.classList.toggle('here', isHere);
-      if (isHere) z.dataset.here = hereText;
+      if (isHere) {
+        z.dataset.here = hereText;
+        // update info bar to current zone
+        var idx = parseInt(z.dataset.i);
+        if (!isNaN(idx) && _WCARDS[idx]) _updateWorldInfo(_WCARDS[idx]);
+      }
+      // click handler for info bar selection
+      z.onclick = function(e) {
+        $$('.zcard').forEach(function(x) { x.classList.remove('sel'); });
+        z.classList.add('sel');
+        var ci = parseInt(z.dataset.i);
+        if (!isNaN(ci) && _WCARDS[ci]) _updateWorldInfo(_WCARDS[ci]);
+      };
     });
   }
 

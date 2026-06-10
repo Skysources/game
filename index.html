@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>SKYZONE · Idle MMO</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=7873">
+<link rel="stylesheet" href="css/style.css?v=7874">
 </head>
 <body>
 <div class="phone">
@@ -120,15 +120,19 @@
   </div>
 
   <!-- ============ WORLD MAP ============ -->
-  <div class="screen" id="screen-world">
-    <div class="w-hdr">
-      <button class="w-back" data-act="gomap" data-t="world.back">◂ BACK</button>
-      <div class="w-hdr-center"><div class="w-title" data-t="world.title">WORLD MAP</div><div class="w-sub" data-t="world.sub">3 cities · 6 zones · 1 center</div></div>
-    </div>
-    <div class="w-scroll">
+  <div class="screen" id="screen-world" style="background:#0b1118;display:flex;flex-direction:column;">
+    <div class="w-scroll" style="flex:1;position:relative;overflow:hidden;">
       <div class="w-map" id="wMap">
-        <svg class="w-links" id="wLinks" viewBox="0 0 430 620"></svg>
-        <div class="w-nodes" id="wNodes"></div>
+        <svg class="w-svg" id="wSvg" viewBox="0 0 430 700" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="w-cards" id="wCards"></div>
+      </div>
+      <div class="w-hdr">
+        <button class="w-back" data-act="gomap" data-t="world.back">◂ BACK</button>
+        <div class="w-hdr-center"><div class="w-title" data-t="world.title">WORLD MAP</div><div class="w-sub" data-t="world.sub">3 cities · 6 zones · 1 center</div></div>
+      </div>
+      <div class="w-info" id="wInfo" style="--wic:#e3564b">
+        <div class="w-info-sw">III</div>
+        <div><div class="w-info-nm" id="wInfoNm">T3 Merkez</div><div class="w-info-ds" id="wInfoDs">—</div></div>
       </div>
     </div>
     <div class="w-legend">
@@ -642,29 +646,29 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-<script src="js/lang.js?v=7873"></script>
-<script src="js/firebase-init.js?v=7873"></script>
+<script src="js/lang.js?v=7874"></script>
+<script src="js/firebase-init.js?v=7874"></script>
 
-<script src="js/art.js?v=7873"></script>
-<script src="js/nodeart.js?v=7873"></script>
-<script src="js/icons.js?v=7873"></script>
-<script src="js/eqicons.js?v=7873"></script>
-<script src="js/gather-icons.js?v=7873"></script>
-<script src="js/mobsvg.js?v=7873"></script>
-<script src="js/biomemobs.js?v=7873"></script>
-<script src="js/mounts.js?v=7873"></script>
-<script src="js/stones.js?v=7873"></script>
-<script src="js/enhstones.js?v=7873"></script>
-<script src="js/zoneimg.js?v=7873"></script>
-<script src="js/data.js?v=7873"></script>
-<script src="js/engine.js?v=7873"></script>
-<script src="js/state.js?v=7873"></script>
-<script src="js/world.js?v=7873"></script>
-<script src="js/dungeon.js?v=7873"></script>
-<script src="js/craft.js?v=7873"></script>
-<script src="js/chat.js?v=7873"></script>
-<script src="js/ui.js?v=7873"></script>
-<script src="js/events.js?v=7873"></script>
-<script src="js/game.js?v=7873"></script>
+<script src="js/art.js?v=7874"></script>
+<script src="js/nodeart.js?v=7874"></script>
+<script src="js/icons.js?v=7874"></script>
+<script src="js/eqicons.js?v=7874"></script>
+<script src="js/gather-icons.js?v=7874"></script>
+<script src="js/mobsvg.js?v=7874"></script>
+<script src="js/biomemobs.js?v=7874"></script>
+<script src="js/mounts.js?v=7874"></script>
+<script src="js/stones.js?v=7874"></script>
+<script src="js/enhstones.js?v=7874"></script>
+<script src="js/zoneimg.js?v=7874"></script>
+<script src="js/data.js?v=7874"></script>
+<script src="js/engine.js?v=7874"></script>
+<script src="js/state.js?v=7874"></script>
+<script src="js/world.js?v=7874"></script>
+<script src="js/dungeon.js?v=7874"></script>
+<script src="js/craft.js?v=7874"></script>
+<script src="js/chat.js?v=7874"></script>
+<script src="js/ui.js?v=7874"></script>
+<script src="js/events.js?v=7874"></script>
+<script src="js/game.js?v=7874"></script>
 </body>
 </html>
