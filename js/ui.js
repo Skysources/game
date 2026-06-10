@@ -450,8 +450,10 @@ SKY.UI = (function () {
   ];
 
   function _buildWorld() {
+    var svgEl = $('#wSvg'); if (!svgEl) return;
     var curLang = SKY.LANG.getLang();
-    if (_worldBuilt && _worldLang === curLang) return;
+    // rebuild if SVG is empty (first render or screen wasn't ready before)
+    if (_worldBuilt && _worldLang === curLang && svgEl.innerHTML.length > 0) return;
     _worldBuilt = true; _worldLang = curLang;
 
     // === Build procedural SVG terrain ===
